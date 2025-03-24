@@ -1,0 +1,75 @@
+#apiVersion: v1
+#kind: Namespace
+#metadata:
+#  name: psql
+#
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: psql
+  namespace: psql
+  labels:
+    app: camera-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: camera-manager
+  template:
+    metadata:
+      labels:
+        app: camera-manager
+    spec:
+      containers:
+        - name: psql
+          image: postgres:14
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: cman
+            - name: POSTGRES_USER
+              value: cman
+            - name: POSTGRES_PASSWORD
+              value: basier2030
+          volumeMounts:
+            - name: psql
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: psql
+          persistentVolumeClaim:
+            claimName: psql
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: psql
+  namespace: psql
+  labels:
+    app: camera-manager
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: psql
+  namespace: psql
+  labels:
+    app: camera-manager
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: camera-manager
+
