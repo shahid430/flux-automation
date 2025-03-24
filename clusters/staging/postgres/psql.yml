@@ -1,8 +1,8 @@
-#apiVersion: v1
-#kind: Namespace
-#metadata:
-#  name: psql
-#
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: psql
+
 ---
 apiVersion: apps/v1
 kind: Deployment
