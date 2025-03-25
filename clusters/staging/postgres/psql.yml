@@ -38,7 +38,7 @@ spec:
               mountPath: /var/lib/postgresql/data
       volumes:
         - name: psql
-          path: /Users/shahidusshamshad
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
