@@ -1,0 +1,108 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ecommerce
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5.7
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: rootPass123
+            - name: MYSQL_DATABASE
+              value: prestashop
+            - name: MYSQL_USER
+              value: pshop
+            - name: MYSQL_PASSWORD
+              value: pshopPass
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: ecommerce
+spec:
+  selector:
+    app: mysql
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: 3306
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prestashop
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prestashop
+  template:
+    metadata:
+      labels:
+        app: prestashop
+    spec:
+      containers:
+        - name: prestashop
+          image: prestashop/prestashop:latest
+          env:
+            - name: PS_INSTALL_AUTO
+              value: "1"
+            - name: DB_SERVER
+              value: mysql
+            - name: DB_NAME
+              value: prestashop
+            - name: DB_USER
+              value: pshop
+            - name: DB_PASSWORD
+              value: pshopPass
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: prestashop-data
+              mountPath: /var/www/html
+      volumes:
+        - name: prestashop-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prestashop
+  namespace: ecommerce
+spec:
+  type: NodePort
+  selector:
+    app: prestashop
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      nodePort: 30080
+
