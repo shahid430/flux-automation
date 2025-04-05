@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: psql
-          image: postgres:14.17.0
+          image: postgres:17.4.0
           ports:
             - containerPort: 5432
           env:
