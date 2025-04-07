@@ -11,4 +11,4 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-automation
-  targetNamespace: main
+  targetNamespace: basier-dev
