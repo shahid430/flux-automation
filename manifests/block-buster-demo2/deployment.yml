@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: basier-dev
+  name: basier-dev1
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -12,7 +12,7 @@ metadata:
     version: 7.3.0
     env: dev
   name: block-buster-demo2
-  namespace: basier-dev
+  namespace: basier-dev1
 spec:
   replicas: 3
   selector:
@@ -63,7 +63,7 @@ metadata:
   labels:
     app: block-buster
   name: block-buster-demo2-service
-  namespace: basier-dev
+  namespace: basier-dev1
 spec:
   ports:
   - port: 80
