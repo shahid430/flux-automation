@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10s
-  path: ./manifests/block-buster-demo1
+  path: ./manifests
   prune: true
   sourceRef:
     kind: GitRepository
