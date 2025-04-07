@@ -1,14 +1,9 @@
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ecommerce
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
-  namespace: ecommerce
+  namespace: basier-dev
 spec:
   replicas: 1
   selector:
@@ -44,7 +39,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mysql
-  namespace: ecommerce
+  namespace: basier-dev
 spec:
   selector:
     app: mysql
@@ -57,7 +52,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prestashop
-  namespace: ecommerce
+  namespace: basier-dev
 spec:
   replicas: 1
   selector:
@@ -95,7 +90,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: prestashop
-  namespace: ecommerce
+  namespace: basier-dev
 spec:
   type: NodePort
   selector:
