@@ -69,7 +69,7 @@ spec:
   - port: 80
     protocol: TCP
     targetPort: 80
-    nodePort: 30003
+    nodePort: 30004
   selector:
     app: block-buster
     version: 7.2.0
