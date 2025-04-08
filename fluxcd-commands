@@ -7,8 +7,7 @@ flux bootstrap github \
      --personal \
      --components-extra=image-reflector-controller,image-automation-controller
 
-kubectl create secret generic github-token-secret \
-    --from-literal=token=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
+
 
 flux create source git flux-automation \
     --url https://github.com/shahid430/flux-automation \
