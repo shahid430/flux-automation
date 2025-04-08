@@ -10,16 +10,16 @@ metadata:
   name: psql
   namespace: psql
   labels:
-    app: camera-manager
+    app: psql
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: camera-manager
+      app: psql
   template:
     metadata:
       labels:
-        app: camera-manager
+        app: psql
     spec:
       containers:
         - name: psql
@@ -46,12 +46,12 @@ metadata:
   name: psql
   namespace: psql
   labels:
-    app: camera-manager
+    app: psql
 spec:
   type: ClusterIP
   ports:
     - port: 5432
       targetPort: 5432
   selector:
-    app: camera-manager
+    app: psql
 
