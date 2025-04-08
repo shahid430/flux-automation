@@ -6,9 +6,11 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5s
-  path: ./manifests
+  path: ./manifests/basier/
   prune: true
+  timeout: 1m0s
+  wait: false
   sourceRef:
     kind: GitRepository
     name: basier
-  targetNamespace: basier
+      #  targetNamespace: basier
