@@ -1,0 +1,26 @@
+flux bootstrap github \
+     --token-auth \
+     --owner=shahid430 \
+     --repository=flux-automation \
+     --branch=main \
+     --path=clusters/staging \
+     --personal \
+     --components-extra=image-reflector-controller,image-automation-controller
+
+kubectl create secret generic github-token-secret \
+    --from-literal=token=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
+
+flux create source git flux-automation \
+    --url https://github.com/shahid430/flux-automation \
+    --branch main \
+    --timeout 10s \
+    --export > security-source.yml
+
+flux create kustomization block-buster-dev-ks \
+    --source GitRepository/flux-automation \
+    --prune true \
+    --interval 10s \
+    --target-namespace main \
+    --path manifests/block-buster-demo2 \
+    --export > block-buster-dev-ks.yml
+
