@@ -3,7 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: basier
-  namespace: flux-system
+  namespace: basier
 spec:
   interval: 1m0s
   ref:
