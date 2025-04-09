@@ -5,6 +5,14 @@ metadata:
   name: basier
   namespace: flux-system
 spec:
+  ignore: |
+    # exclude all
+    #/*
+    # include deploy dir
+    #!/deploy
+    # exclude file extensions from deploy dir
+    /deploy/**/*.md
+    /deploy/**/*.txt 
   interval: 1m0s
   ref:
     branch: main
