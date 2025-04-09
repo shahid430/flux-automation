@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5s
-  path: ./manifests/infra/
+  path: ./manifests/dev/infra/
   prune: true
   timeout: 1m0s
   wait: false
