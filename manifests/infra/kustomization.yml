@@ -4,8 +4,4 @@ kind: Kustomization
 metadata:
   name: flux-system
 resources:
-  - demo1
-  - demo2
-  - prestashop
-  - mongodb
-    #  - postgres
+  - postgres
