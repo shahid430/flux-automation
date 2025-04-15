@@ -3,8 +3,9 @@
 #####################################################################
 kubectl get gitrepository -n flux-system
 kubectl describe gitrepository basier -n flux-system
-
-
+flux suspend source git infra
+flux resume source git infra
+kubectl events --for GitRepository/basier -n flux-system
 #####################################################################
 ###  Deployments  ####
 #####################################################################
