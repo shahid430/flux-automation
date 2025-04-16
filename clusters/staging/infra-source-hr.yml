@@ -11,5 +11,5 @@ spec:
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: GitRepository
-        name: infra
+        name: flux-automation
   interval: 10s
