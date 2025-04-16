@@ -1,0 +1,32 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: infra
+  namespace: flux-system
+spec:
+  # How often Flux checks for changes
+  interval: 30s
+  
+  # Name of the Helm release in your cluster (can be the same as 'infra' or different)
+  releaseName: infra
+  
+  # This references your local chart within the same Git repo
+  chart:
+    spec:
+      chart: ./manifests/dev/infra/
+      sourceRef:
+        kind: GitRepository
+        name: infra     # Must match your GitRepository's metadata.name
+        namespace: flux-system
+      # Optionally set a version or `reconcileStrategy` if you have a Chart.yaml version:
+      # version: "1.0.0"
+      # reconcileStrategy: ChartVersion
+
+  # Optionally, you can define values inline or via valuesFrom:
+  # values:
+  #   replicaCount: 2
+  #
+  # valuesFrom:
+  #   - kind: Secret
+  #     name: my-helm-values
+
