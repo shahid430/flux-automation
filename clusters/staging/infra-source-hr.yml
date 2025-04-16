@@ -7,9 +7,9 @@ metadata:
 spec:
   chart:
     spec:
-      chart: ./manifests/dev/infra/charts/
+      chart: ./manifests/dev/infra/charts
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: GitRepository
-        name: flux-automation
+        name: infra
   interval: 10s
