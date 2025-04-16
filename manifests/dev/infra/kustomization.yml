@@ -6,4 +6,4 @@ metadata:
 resources:
   - postgres
   - mongodb
-    #  - minio
+  - minio
