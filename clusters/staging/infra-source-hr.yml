@@ -11,5 +11,5 @@ spec:
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: GitRepository
-        name: infra
+        name: infra-hr
   interval: 10s
