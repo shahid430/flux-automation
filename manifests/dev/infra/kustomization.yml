@@ -7,4 +7,4 @@ resources:
   - postgres
   - mongodb
   - minio
-  - kong
+    #  - kong
