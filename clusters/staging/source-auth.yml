@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: auth-secret
+  namespace: flux-system
+stringData:
+  username: shahid430
+  password: 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
