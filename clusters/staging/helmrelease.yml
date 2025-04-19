@@ -1,18 +1,27 @@
 ---
+#sources/kong.yaml
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: kong
+spec:
+  url: https://charts.konghq.com
+  interval: 10m
+---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: infra-helm
+  name: kong
   namespace: flux-system
 spec:
   interval: 30s
-  releaseName: infra-helm
+  releaseName: kong
   chart:
     spec:
-      chart: ./kong
+      chart: kong
       sourceRef:
-        kind: GitRepository
-        name: infra     # Must match your GitRepository's metadata.name
+        kind: HelmRepository
+        name: kong     # Must match your GitRepository's metadata.name
         namespace: flux-system
       # version: "1.0.0"
-      #reconcileStrategy: ChartVersion
+      reconcileStrategy: ChartVersion
