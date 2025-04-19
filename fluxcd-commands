@@ -34,3 +34,18 @@ flux create kustomization block-buster-dev-ks \
     --path manifests/block-buster-demo2 \
     --export > block-buster-dev-ks.yml
 
+HelmRelease:
+flux create hr kube-prometheus-stack \
+    --chart=../../manifests/dev/monitoring/kube-prometheus-stack \
+    --interval=10s --target-namespace=monitoring \
+    --source=GitRepository/kube-prometheus-stack \
+    --values=../../manifests/dev/monitoring/kube-prometheus-stack/values.yaml \
+    --export > helmrelease-prometheus.yml
+
+GitRepository:
+
+flux create source git kube-prometheus-stack \
+    --url=https://github.com/shahid430/flux-automation 
+    --branch=main \
+    --timeout=10s \
+    --export > gitrepository-prometheus.yml
