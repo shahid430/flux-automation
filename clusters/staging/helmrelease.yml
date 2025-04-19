@@ -17,17 +17,7 @@ spec:
   values:
     prometheus:
       prometheusSpec:
-        retention: 10d
-        retentionSize: 100Gi
         storageClassName: standard
-        resources:
-          requests:
-            memory: 1Gi
-            cpu: 500m
-        serviceMonitorSelector:
-          matchLabels:
-            app: kube-prometheus-stack-prometheus-node-exporter
-        serviceMonitorSelectorNilUsesHelmValues: false
     grafana:
       adminPassword: admin
       adminUser: admin
