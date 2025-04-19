@@ -7,5 +7,3 @@ resources:
   - demo1
   - demo2
   - prestashop
-    #  - mongodb
-    #  - postgres
