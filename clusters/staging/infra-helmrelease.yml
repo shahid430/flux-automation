@@ -16,15 +16,15 @@ metadata:
 spec:
   chart:
     spec:
-      chart: kong
+      chart: ingress
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
         name: kong
-      version: 2.48.0
+          #      version: 2.48.0
   install:
-    crds: Create
+    createNamespace: true
   interval: 1m0s
   releaseName: kong
-  upgrade:
-    crds: CreateReplace
+    #  upgrade:
+    #    crds: CreateReplace
