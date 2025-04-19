@@ -19,14 +19,6 @@ spec:
   interval: 10s
   targetNamespace: monitoring
   values:
-    prometheus:
-      volumeClaimTemplate:
-        storageClassName: standard
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 5Gi
     grafana:
       adminPassword: admin
       adminUser: admin
