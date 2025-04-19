@@ -10,7 +10,6 @@ spec:
     branch: main
   url: https://github.com/shahid430/flux-automation
 ---
----
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
