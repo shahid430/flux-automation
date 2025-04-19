@@ -16,7 +16,7 @@ metadata:
 spec:
   chart:
     spec:
-      chart: kong/ingress
+      chart: ingress
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
