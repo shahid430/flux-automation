@@ -19,7 +19,7 @@ metadata:
 spec:
   chart:
     spec:
-      chart: ../../manifests/dev/monitoring/infrastructure/
+      chart: ./manifests/dev/monitoring/infrastructure/
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: GitRepository
