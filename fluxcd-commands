@@ -6,6 +6,13 @@ kubectl describe gitrepository basier -n flux-system
 flux suspend source git infra
 flux resume source git infra
 kubectl events --for GitRepository/basier -n flux-system
+flux reconcile source git flux-system
+flux reconcile helmrelease kube-prometheus-stack -n monitoring
+flux reconcile kustomization infra
+flux reconcile helmrelease kube-prometheus-stack -n monitoring
+flux logs -f -n flux-system
+flux logs -f -n flux-system --kind GitRepository --name flux-system
+flux reconcile source helm kube-prometheus-stack
 #####################################################################
 ###  Deployments  ####
 #####################################################################
@@ -36,16 +43,9 @@ flux create kustomization block-buster-dev-ks \
 
 HelmRelease:
 flux create hr kube-prometheus-stack \
-    --chart=../../manifests/dev/monitoring/kube-prometheus-stack \
-    --interval=10s --target-namespace=monitoring \
-    --source=GitRepository/kube-prometheus-stack \
-    --values=../../manifests/dev/monitoring/kube-prometheus-stack/values.yaml \
+    --chart=./manifests/dev/monitoring/kube-prometheus-stack \
+    --interval=10s \
+    --target-namespace=monitoring \
+    --source=GitRepository/infra \
     --export > helmrelease-prometheus.yml
 
-GitRepository:
-
-flux create source git kube-prometheus-stack \
-    --url=https://github.com/shahid430/flux-automation 
-    --branch=main \
-    --timeout=10s \
-    --export > gitrepository-prometheus.yml
