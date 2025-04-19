@@ -18,7 +18,7 @@ metadata:
 spec:
   chart:
     spec:
-      chart: ./manifests/dev/monitoring/infrastructure/
+      chart: ./manifests/dev/monitoring/kube-prometheus-stack
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: GitRepository
