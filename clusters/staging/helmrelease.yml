@@ -25,3 +25,8 @@ spec:
         namespace: flux-system
       # version: "1.0.0"
       reconcileStrategy: ChartVersion
+  install:
+    createNamespace: true
+  targetNamespace: kong
+  values:
+    replicaCount: 1

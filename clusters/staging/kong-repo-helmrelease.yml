@@ -1,0 +1,20 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kong
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: kong/ingress
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: kong
+  install:
+    crds: Create
+  interval: 1m0s
+  releaseName: kong
+  upgrade:
+    crds: CreateReplace
