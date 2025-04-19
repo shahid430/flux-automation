@@ -27,5 +27,5 @@ spec:
   targetNamespace: kong
   install:
     createNamespace: true
-    remediate: true
+
 
