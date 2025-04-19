@@ -37,3 +37,5 @@ metadata:
   name: kube-prometheus-stack
   namespace: flux-system
 namespace: monitoring
+commonLabels:
+  app.kubernetes.io/part-of: monitoring
