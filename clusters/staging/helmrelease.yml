@@ -26,7 +26,6 @@ spec:
   targetNamespace: monitoring
   install:
     createNamespace: false
-  targetNamespace: monitoring
   values:
     grafana:
       service:
