@@ -25,9 +25,3 @@ spec:
         enabled: true
         type: ClusterIP
       replicas: 3
-      persistentVolume:
-        enabled: true
-        storageClassName: standard
-        accessModes:
-          - ReadWriteOnce
-        size: 10Gi
