@@ -1,0 +1,38 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: grafana
+  namespace: flux-system
+spec:
+  interval: 30s
+  url: https://grafana.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  chart:
+    spec:
+      chart: grafana
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+          #      version: 2.48.0
+  install:
+    createNamespace: true
+  interval: 1m0s
+  releaseName: grafana
+  targetNamespace: monitoring
+  values:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClassName: standard
+    adminPassword: grafana
+    replicas: 1
+    #  upgrade:
+    #    crds: CreateReplace
