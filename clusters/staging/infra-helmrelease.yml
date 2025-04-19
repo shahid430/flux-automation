@@ -21,7 +21,13 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: kong
+        namespace: flux-system
   interval: 1m0s
   releaseName: kong
   targetNamespace: kong
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+      retryInterval: 5s
 
