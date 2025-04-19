@@ -16,11 +16,12 @@ metadata:
 spec:
   chart:
     spec:
-      chart: ingress
+      chart: kong
+      version: 2.48.0
       sourceRef:
         kind: HelmRepository
         name: kong
-        version: 0.19.0
   interval: 1m0s
   releaseName: kong
   targetNamespace: kong
+
