@@ -8,7 +8,7 @@ spec:
   interval: 1m
   install:
     createNamespace: true
-  path: ./staging/infrastructure
+  path: ./infrastructure
   chart:
     spec:
       chart: kube-prometheus-stack
