@@ -4254,13 +4254,13 @@ prometheus:
     storageSpec: {}
     ## Using PersistentVolumeClaim
     ##
-    #  volumeClaimTemplate:
-    #    spec:
-    #      storageClassName: gluster
-    #      accessModes: ["ReadWriteOnce"]
-    #      resources:
-    #        requests:
-    #          storage: 50Gi
+     volumeClaimTemplate:
+       spec:
+         storageClassName: standard
+         accessModes: ["ReadWriteOnce"]
+         resources:
+           requests:
+             storage: 5Gi
     #    selector: {}
 
     ## Using tmpfs volume

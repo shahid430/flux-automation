@@ -20,8 +20,13 @@ spec:
   targetNamespace: monitoring
   values:
     prometheus:
-      prometheusSpec:
+      volumeClaimTemplate:
         storageClassName: standard
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
     grafana:
       adminPassword: admin
       adminUser: admin
@@ -29,3 +34,9 @@ spec:
         enabled: true
         type: ClusterIP
       replicas: 3
+      persistence:
+        enabled: true
+        storageClassName: standard
+        accessModes:
+          - ReadWriteOnce
+        size: 15Gi
