@@ -9,7 +9,7 @@ spec:
   releaseName: infra-helm
   chart:
     spec:
-      chart: kong
+      chart: ./kong
       sourceRef:
         kind: GitRepository
         name: infra     # Must match your GitRepository's metadata.name
