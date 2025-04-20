@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: kong-ingress
+  name: kong
   namespace: flux-system
   annotations:
     fluxcd.io/automated: "true"
@@ -10,7 +10,7 @@ metadata:
 spec:
   chart:
     spec:
-      chart: ./manifests/dev/monitoring/ingress
+      chart: ./manifests/dev/monitoring/kong
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: GitRepository
