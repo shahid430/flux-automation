@@ -39,7 +39,7 @@ gateway:
     clusterIP: None
 
   ingressController:
-    enabled: true
+    enabled: false
 
   env:
     role: traditional
