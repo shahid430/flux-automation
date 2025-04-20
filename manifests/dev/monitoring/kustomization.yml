@@ -5,3 +5,4 @@ metadata:
   name: flux-system
 resources:
   - kube-prometheus-stack
+  - ingress
