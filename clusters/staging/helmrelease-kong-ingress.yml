@@ -19,6 +19,9 @@ spec:
   interval: 10s
   targetNamespace: kong
   values:
-      service:
-        enabled: true
-        type: ClusterIP
+    values:
+    controller:
+      ingressController:
+        ingressClass: kong          # keep using the same class name
+        ingressClassResource:
+          create: false
