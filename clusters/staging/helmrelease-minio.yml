@@ -10,7 +10,7 @@ metadata:
 spec:
   chart:
     spec:
-      chart: ./manifests/dev/infra/minio
+      chart: ./manifests/dev/monitoring/
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: GitRepository
