@@ -7,11 +7,11 @@ metadata:
 spec:
   chart:
     spec:
-      chart: postgresql
+      chart: prometheus-postgres-exporter
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
-        name: postgresql
+        name: pgp-exporter
   interval: 10s
-  releaseName: postgresql
+  releaseName: pgp-exporter
   targetNamespace: monitoring
