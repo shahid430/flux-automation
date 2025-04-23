@@ -1,0 +1,9 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: milvus-database
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  url: https://raw.githubusercontent.com/milvus-io/milvus-helm/gh-pages
