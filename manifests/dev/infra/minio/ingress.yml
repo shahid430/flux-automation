@@ -14,10 +14,10 @@ spec:
     - host: minio.cluster.local
       http:
         paths:
-          path: /minio(/|$)(.*)
-          pathType: Prefix
-          backend:
-            service:
-              name: minio
-              port:
-                number: 9001
+          - path: /minio(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: minio
+                port:
+                  number: 9001
