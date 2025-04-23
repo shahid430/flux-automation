@@ -15,3 +15,8 @@ spec:
   interval: 10s
   releaseName: milvus
   targetNamespace: milvus
+  values:
+    pulsar:
+      enabled: false
+    kafka:
+      enabled: true
