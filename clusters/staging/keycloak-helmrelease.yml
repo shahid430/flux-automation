@@ -10,13 +10,13 @@ spec:
       chart: keycloak
       reconcileStrategy: ChartVersion
       sourceRef:
-        kind: OCIRepository
+        kind: HelmRepository
         name: keycloak
+        namespace: flux-system
   interval: 10s
   releaseName: keycloak
   targetNamespace: keyclaok
-  values: 
-    replicaCount: 1
-    keycloak:
-      username: admin
-      password: admin
+  values:
+    auth:
+      adminUser: admin
+      adminPassword: admin
