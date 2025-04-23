@@ -14,7 +14,7 @@ spec:
     - host: minio.cluster.local
       http:
         paths:
-          - path: /minio(/|$)(.*)
+          - path: /
             pathType: Prefix
             backend:
               service:
