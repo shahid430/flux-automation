@@ -1,0 +1,23 @@
+# user.yml
+---
+- hosts: all                # run on every host in your inventory
+  become: true              # escalate to root for user creation
+  gather_facts: false
+
+  tasks:
+    - name: "looping items"
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+      loop:
+        - "item1"
+        - "item2"
+        - "item3"
+    - name: "adding users"
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: absent
+        group: "users"
+      with_items:
+        - "user1"
+        - "user2"
+        - "user3"
