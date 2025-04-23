@@ -1,9 +1,12 @@
 ---
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
 metadata:
   name: keycloak
   namespace: flux-system
 spec:
   interval: 1m0s
-  url: https://charts.bitnami.com/bitnami
+  provider: generic
+  ref:
+    tag: 24.5.8
+  url: oci://registry-1.docker.io/bitnamicharts/keycloak

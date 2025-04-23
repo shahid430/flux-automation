@@ -10,7 +10,7 @@ spec:
       chart: keycloak
       reconcileStrategy: ChartVersion
       sourceRef:
-        kind: HelmRepository
+        kind: OCIRepository
         name: keycloak
   interval: 10s
   releaseName: keycloak
