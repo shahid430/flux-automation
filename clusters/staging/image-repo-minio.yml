@@ -1,9 +1,0 @@
----
-apiVersion: image.toolkit.fluxcd.io/v1beta2
-kind: ImageRepository
-metadata:
-  name: minio-latest
-  namespace: flux-system
-spec:
-  image: docker.io/grafana/loki
-  interval: 10s
