@@ -5,5 +5,5 @@ metadata:
   name: minio-latest
   namespace: flux-system
 spec:
-  image: grafana.github.io/helm-charts
+  image: docker.io/grafana/loki
   interval: 10s
