@@ -1,0 +1,9 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: minio-latest
+  namespace: flux-system
+spec:
+  image: https://grafana.github.io/helm-charts
+  interval: 10s
