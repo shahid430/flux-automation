@@ -15,6 +15,7 @@ spec:
   interval: 10s
   targetNamespace: monitoring
   values:
+    replicas: 2
     controller:
       JCasC:
         securityRealm: |-
