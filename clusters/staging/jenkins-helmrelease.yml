@@ -14,3 +14,17 @@ spec:
         name: jenkins
   interval: 10s
   targetNamespace: monitoring
+  values:
+    controller:
+      JCasC:
+        securityRealm: |-
+          local:
+            allowsSignup: false
+            enableCaptcha: false
+            users:
+            - id: "${chart-admin-username}"
+              name: "Jenkins Admin"
+              password: "${chart-admin-password}"
+        authorizationStrategy: |-
+          loggedInUsersCanDoAnything:
+            allowAnonymousRead: false
