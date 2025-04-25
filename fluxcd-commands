@@ -45,7 +45,15 @@ k get secrets -n sealed-secrets -oyaml
 #You can use this certificate to encrypt secrets using the kubeseal command
 #You can also use the --cert flag to specify the certificate file
 #You can also use the --controller-name and --controller-namespace flags to specify the controller name and namespace
-kubeseal --fetch-cert --controller-name sealed-secrets --controller-namespace=sealed-secrets
+kubeseal --fetch-cert --controller-name sealed-secrets --controller-namespace=sealed-secrets > ../../manifests/dev/infra/sealed-secrets/sealed-secret.pub
+kubectl -oyaml --scope cluster-wide --cert ../../manifests/dev/infra/sealed-secrets/sealed-secret.pub < ../../manifests/dev/infra/sealed-secrets/psql-secret.yml.backup > psql-secret.yml
+kubectl delete secret psql-secret -n psql 
+flux suspend kustomization infra
+git add -A && git commit -m "sealed secrets" && git pull && git push
+flux resume kustomization infra
+flux reconcile kustomization infra --with-source
+flux reconcile source git basier --with-source
+flux reconcile source git flux-systen --with-source
 #####################################################################
 ###  Deployments  ####
 #####################################################################
