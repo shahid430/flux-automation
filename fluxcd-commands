@@ -13,6 +13,39 @@ flux reconcile helmrelease kube-prometheus-stack -n monitoring
 flux logs -f -n flux-system
 flux logs -f -n flux-system --kind GitRepository --name flux-system
 flux reconcile source helm kube-prometheus-stack
+####################################################################
+#How to deploy sealed-secrets
+flux create source helm sealed-secrets  \
+    --interval=1m0s \
+    --url="https://bitnami-labs.github.io/sealed-secrets" \
+    --export > sealed-secrets-helmrepo.yml
+flux create helmrelease sealed-secrets \
+    --source=HelmRepository/sealed-secrets \
+    --chart=sealed-secrets \
+    --interval=1m0s \
+    --target-namespace=sealed-secrets \
+    --release-name=sealed-secrets \
+    --export > sealed-secrets-helmrelease.yml
+flux create kustomization sealed-secrets-kustomization \
+    --source=GitRepository/sealed-secrets \
+    --path="./manifests/dev/infra/sealed-secrets" \
+    --prune=true \
+    --interval=1m0s \
+    --target-namespace=sealed-secrets \
+    --export > sealed-secrets-kustomization.yml
+#Install kubeseal
+KUBESEAL_VERSION='0.23.0'
+curl -OL "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION:?}/kubeseal-${KUBESEAL_VERSION:?}-linux-amd64.tar.gz"
+tar -xvzf kubeseal-${KUBESEAL_VERSION:?}-linux-amd64.tar.gz kubeseal
+sudo install -m 755 kubeseal /usr/local/bin/kubeseal
+k get secrets -n sealed-secrets -oyaml
+#How to fetch the certificate
+#This command will create a file called pub-cert.pem in the current directory
+#This file contains the public certificate used to encrypt the secrets
+#You can use this certificate to encrypt secrets using the kubeseal command
+#You can also use the --cert flag to specify the certificate file
+#You can also use the --controller-name and --controller-namespace flags to specify the controller name and namespace
+kubeseal --fetch-cert --controller-name sealed-secrets --controller-namespace=sealed-secrets
 #####################################################################
 ###  Deployments  ####
 #####################################################################
