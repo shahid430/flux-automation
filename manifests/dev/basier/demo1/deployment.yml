@@ -27,12 +27,12 @@ spec:
         usage: global
         env: dev
         version: 7.2.0
-      annotations:
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "internal-app"
-        vault.hashicorp.com/agent-inject-secret-db-config.txt: "internal/data/db/config"
+          #      annotations:
+          #        vault.hashicorp.com/agent-inject: "true"
+          #        vault.hashicorp.com/role: "internal-app"
+          #        vault.hashicorp.com/agent-inject-secret-db-config.txt: "internal/data/db/config"
     spec:
-      serviceAccountName: internal-app
+      #      serviceAccountName: internal-app
       containers:
         - name: app
           image:  siddharth67/block-buster-dev:7.2.0
