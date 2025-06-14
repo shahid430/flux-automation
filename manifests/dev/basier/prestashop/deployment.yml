@@ -53,9 +53,9 @@ metadata:
   name: prestashop
   namespace: basier
   annotations:
-    vault.hashicorp.com/agent-inject: true
-    vault.hashicorp.com/role: 'internal-app'
-    vault.hashicorp.com/agent-inject-secret-database-config.txt: 'internal/data/database/config'
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/role: "internal-app"
+    vault.hashicorp.com/agent-inject-secret-database-config.txt: "internal/data/database/config"
     vault.hashicorp.com/tls-skip-verify: "true"
 spec:
   replicas: 1
