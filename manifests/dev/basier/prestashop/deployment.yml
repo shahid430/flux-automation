@@ -13,6 +13,7 @@ spec:
       labels:
         app: mysql
     spec:
+      serviceAccountName: internal-app
       containers:
         - name: mysql
           image: mysql:9.2.0
