@@ -14,7 +14,6 @@ metadata:
   name: demo1
   namespace: basier
 spec:
-  serviceAccountName: internal-app
   replicas: 3
   selector:
     matchLabels:
@@ -29,6 +28,7 @@ spec:
         env: dev
         version: 7.2.0
     spec:
+      serviceAccountName: internal-app
       containers:
         - name: app
           image:  siddharth67/block-buster-dev:7.2.0
