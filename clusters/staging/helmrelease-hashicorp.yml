@@ -5,7 +5,7 @@ metadata:
   name: hashicorp-vault
   namespace: flux-system
   annotations:
-    fluxcd.io/automated: "false"
+    fluxcd.io/automated: "true"
     # fluxcd.io/health-check: "true"
 spec:
   chart:
@@ -21,7 +21,6 @@ spec:
   values:
     ui: 
      enabled: true
-     serviceType: "LoadBalancer"
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
