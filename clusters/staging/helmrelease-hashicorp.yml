@@ -4,23 +4,20 @@ kind: HelmRelease
 metadata:
   name: hashicorp-vault
   namespace: flux-system
-  annotations:
-    fluxcd.io/automated: "true"
-    # fluxcd.io/health-check: "true"
 spec:
   chart:
     spec:
-      chart: ./manifests/dev/infra/vault
-      reconcileStrategy: ChartVersion
+      chart: vault
+      version: "0.27.0" # set desired version
       sourceRef:
-        kind: GitRepository
-        name: infra
+        kind: HelmRepository
+        name: hashicorp-vault
         namespace: flux-system
   interval: 10s
   targetNamespace: hashicorp-vault
   values:
-    ui: 
-     enabled: true
+    ui:
+      enabled: true
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
@@ -30,18 +27,6 @@ metadata:
 spec:
   interval: 1m0s
   url: https://helm.releases.hashicorp.com
-  secretRef:
-    name: hashicorp-vault-helm-repo-creds
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: Secret
-metadata:
-  name: hashicorp-vault-helm-repo-creds
-  namespace: flux-system
-type: Opaque
-data:
-  username: dmF1bHQK
-  password: dmF1bHQxMjMK
 ---
 apiVersion: v1
 kind: Namespace
