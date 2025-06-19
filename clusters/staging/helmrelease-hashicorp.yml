@@ -5,8 +5,8 @@ metadata:
   name: hashicorp-vault
   namespace: flux-system
   annotations:
-    fluxcd.io/automated: "true"
-    fluxcd.io/health-check: "true"
+    fluxcd.io/automated: "false"
+    # fluxcd.io/health-check: "true"
 spec:
   chart:
     spec:
@@ -22,3 +22,24 @@ spec:
     ui: 
      enabled: true
      serviceType: "LoadBalancer"
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: hashicorp-vault
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  url: https://helm.releases.hashicorp.com
+  secretRef:
+    name: hashicorp-vault-helm-repo-creds
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: Secret
+metadata:
+  name: hashicorp-vault-helm-repo-creds
+  namespace: flux-system
+type: Opaque
+data:
+  username: dmF1bHQK
+  password: dmF1bHQxMjMK
