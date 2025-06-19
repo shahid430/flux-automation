@@ -42,3 +42,10 @@ type: Opaque
 data:
   username: dmF1bHQK
   password: dmF1bHQxMjMK
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hashicorp-vault
+  labels:
+    name: hashicorp-vault
