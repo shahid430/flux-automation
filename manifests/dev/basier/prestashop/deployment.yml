@@ -16,7 +16,6 @@ spec:
       containers:
         - name: mysql
           image: mysql:8.4
-          args: ["--default-authentication-plugin=mysql_native_password"]
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: rootPass123
@@ -31,20 +30,6 @@ spec:
           volumeMounts:
             - name: mysql-data
               mountPath: /var/lib/mysql
-          startupProbe:
-            exec:
-              command: ["sh","-c","mysqladmin ping -uroot -p$MYSQL_ROOT_PASSWORD --silent"]
-            initialDelaySeconds: 10
-            periodSeconds: 5
-            failureThreshold: 30
-          readinessProbe:
-            exec:
-              command: ["sh","-c","mysqladmin ping -uroot -p$MYSQL_ROOT_PASSWORD --silent"]
-            periodSeconds: 10
-          livenessProbe:
-            exec:
-              command: ["sh","-c","mysqladmin ping -uroot -p$MYSQL_ROOT_PASSWORD --silent"]
-            periodSeconds: 10
       volumes:
         - name: mysql-data
           emptyDir: {}
@@ -77,8 +62,6 @@ spec:
       labels:
         app: prestashop
     annotations:
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "internal-app"
         vault.hashicorp.com/agent-inject-secret-db-config.txt: "internal/data/database/config"
         vault.hashicorp.com/tls-skip-verify: "true"
     spec:
