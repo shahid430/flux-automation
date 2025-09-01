@@ -24,6 +24,9 @@ metadata:
   name: basier
   namespace: flux-system
 spec:
+  commonMetadata:
+    labels:
+      environment: dev
   interval: 5s
   path: ./manifests/dev/basier/
   prune: true
