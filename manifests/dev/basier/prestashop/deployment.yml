@@ -61,9 +61,6 @@ spec:
     metadata:
       labels:
         app: prestashop
-    annotations:
-        vault.hashicorp.com/agent-inject-secret-db-config.txt: "internal/data/database/config"
-        vault.hashicorp.com/tls-skip-verify: "true"
     spec:
       containers:
         - name: prestashop
