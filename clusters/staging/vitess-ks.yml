@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # Pull the official operator install manifest from vitessio/vitess
+  - https://raw.githubusercontent.com/vitessio/vitess/release-22.0/examples/operator/operator.yaml
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: vitess
+  namespace: flux-system
+spec:
+  interval: 15m
+  prune: true
+  wait: true
+  timeout: 10m
+  sourceRef:
+    kind: GitRepository
+    name: gitops
+  path: ./manifests/dev/infra/vitess
+  targetNamespace: vitess-operator
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: vitess-operator
+      namespace: example
+
