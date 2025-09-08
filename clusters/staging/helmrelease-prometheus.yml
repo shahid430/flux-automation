@@ -3,75 +3,29 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
-  namespace: monitoring
-  labels:
-    app.kubernetes.io/instance: kube-prometheus-stack
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: kube-prometheus-stack
-    app.kubernetes.io/version: 77.5.0
-    helm.toolkit.fluxcd.io/paused: "false"
+  namespace: flux-system
+  annotations:
     fluxcd.io/automated: "true"
     fluxcd.io/health-check: "true"
-spec:
+spec: 
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: "77.5.0"
+      version: "77.5.0" # set desired version
       sourceRef:
         kind: HelmRepository
-        name: prometheus-community
+        name: kube-prometheus-stack
         namespace: flux-system
   interval: 10s
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    remediation:
-      retries: 3
-  values:
-    alertmanager:
-      enabled: "false" # Disable Alertmanager if not needed
-    grafana:
-      enabled: "true"
-      adminUser:
-        existingSecret: grafana-admin-credentials
-        userKey: admin-user
-        passwordKey: admin-password
-      service:
-        type: LoadBalancer
-      ingress:
-        enabled: "false" # Set to true if you want to expose Grafana via Ingress
-        annotations: {}
-        hosts:
-          - grafana.example.com
-        paths:
-          - /
-        tls: []
-    prometheus:
-      prometheusSpec:
-        serviceMonitorSelectorNilUsesHelmValues: false
-        ruleSelectorNilUsesHelmValues: false
-      service:
-        type: ClusterIP
-    kubeStateMetrics:
-      enabled: "true"
-    nodeExporter:
-      enabled: "true"
-    additionalServiceMonitors:
-      - name: custom-service-monitor
-        selector:
-          matchLabels:
-            app: my-custom-app
-        endpoints:
-          - port: http
-            interval: 30s
-    resources:
-      requests:
-        memory: "512Mi"
-        cpu: "250m"
-      limits:
-        memory: "1Gi"
-        cpu: "500m"
-    tolerations: []
-    affinity: {}
   targetNamespace: monitoring
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  url: https://prometheus-community.github.io/helm-charts
+
+
