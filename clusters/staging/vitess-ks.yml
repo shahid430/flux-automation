@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 resources:
   # Pull the official operator install manifest from vitessio/vitess
-  - https://raw.githubusercontent.com/vitessio/vitess/release-22.0/examples/operator/operator.yaml
+  - https://github.com/planetscale/vitess-operator/blob/main/deploy/operator.yaml
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
