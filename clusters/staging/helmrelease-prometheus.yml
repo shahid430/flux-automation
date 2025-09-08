@@ -20,15 +20,13 @@ spec:
   interval: 10s
   targetNamespace: monitoring
   values:
-    prometheus:
-      replicas: 0
     grafana:
       adminPassword: admin
       adminUser: admin
       service:
         enabled: true
         type: ClusterIP
-      replicas: 0
+      replicas: 1
       persistence:
         enabled: true
         storageClassName: standard
