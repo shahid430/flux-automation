@@ -18,9 +18,10 @@ spec:
       chart: kube-prometheus-stack
       version: "77.5.0"
       sourceRef:
-        kind: GitRepository
-        name: infra
-  interval: 5m0s
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+  interval: 10s
   install:
     remediation:
       retries: 3
@@ -29,24 +30,48 @@ spec:
       retries: 3
   values:
     alertmanager:
-      enabled: true
-    kubeStateMetrics:
-      enabled: true
-    nodeExporter:
-      enabled: true
-    prometheus:
-      enabled: true
+      enabled: "false" # Disable Alertmanager if not needed
     grafana:
-      enabled: true
-      adminUser: admin
-      adminPassword: admin
+      enabled: "true"
+      adminUser:
+        existingSecret: grafana-admin-credentials
+        userKey: admin-user
+        passwordKey: admin-password
       service:
         type: LoadBalancer
       ingress:
-        enabled: true
-        annotations:
-          kubernetes.io/ingress.class: nginx
-          nginx.ingress.kubernetes.io/rewrite-target: /$1
+        enabled: "false" # Set to true if you want to expose Grafana via Ingress
+        annotations: {}
         hosts:
-          - grafana.example.com # Replace with your domain
-          
+          - grafana.example.com
+        paths:
+          - /
+        tls: []
+    prometheus:
+      prometheusSpec:
+        serviceMonitorSelectorNilUsesHelmValues: false
+        ruleSelectorNilUsesHelmValues: false
+      service:
+        type: ClusterIP
+    kubeStateMetrics:
+      enabled: "true"
+    nodeExporter:
+      enabled: "true"
+    additionalServiceMonitors:
+      - name: custom-service-monitor
+        selector:
+          matchLabels:
+            app: my-custom-app
+        endpoints:
+          - port: http
+            interval: 30s
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "250m"
+      limits:
+        memory: "1Gi"
+        cpu: "500m"
+    tolerations: []
+    affinity: {}
+  targetNamespace: monitoring
