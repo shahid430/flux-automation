@@ -8,7 +8,6 @@ metadata:
     fluxcd.io/automated: "true"
     fluxcd.io/health-check: "true"
 spec:
-  suspend: false
   chart:
     spec:
       chart: kube-prometheus-stack
