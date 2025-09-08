@@ -1,0 +1,32 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: harbor
+  namespace: flux-system
+spec:
+  url: https://helm.goharbor.io
+  interval: 10m
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: harbor
+  namespace: flux-system
+spec:
+  interval: 10m
+  targetNamespace: harbor
+  chart:
+    spec:
+      chart: harbor
+      version: "1.14.2" # You can update to the latest version if needed
+      sourceRef:
+        kind: HelmRepository
+        name: harbor
+        namespace: flux-system
+  values:
+    expose:
+      type: NodePort
+      tls:
+        enabled: false
+    harborAdminPassword: "Harbor12345"
