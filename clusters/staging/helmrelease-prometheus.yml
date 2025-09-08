@@ -3,8 +3,13 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
-  namespace: flux-system
-  annotations:
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/instance: kube-prometheus-stack
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kube-prometheus-stack
+    app.kubernetes.io/version: 77.5.0
+    helm.toolkit.fluxcd.io/paused: "false"
     fluxcd.io/automated: "true"
     fluxcd.io/health-check: "true"
 spec:
@@ -15,20 +20,33 @@ spec:
       sourceRef:
         kind: GitRepository
         name: infra
-        namespace: flux-system
-  interval: 10s
-  targetNamespace: monitoring
+  interval: 5m0s
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
   values:
+    alertmanager:
+      enabled: true
+    kubeStateMetrics:
+      enabled: true
+    nodeExporter:
+      enabled: true
+    prometheus:
+      enabled: true
     grafana:
-      adminPassword: admin
+      enabled: true
       adminUser: admin
+      adminPassword: admin
       service:
+        type: LoadBalancer
+      ingress:
         enabled: true
-        type: ClusterIP
-      replicas: 1
-      persistence:
-        enabled: true
-        storageClassName: standard
-        accessModes:
-          - ReadWriteOnce
-        size: 10Gi
+        annotations:
+          kubernetes.io/ingress.class: nginx
+          nginx.ingress.kubernetes.io/rewrite-target: /$1
+        hosts:
+          - grafana.example.com # Replace with your domain
+          
