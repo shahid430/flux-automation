@@ -5,6 +5,6 @@ metadata:
   name: flux-system
 resources:
   #  - kube-prometheus-stack
-  - ingress
+  #  - ingress
 #  - kong
 #  - loki-distributed
