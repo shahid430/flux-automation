@@ -8,7 +8,7 @@ metadata:
     fluxcd.io/automated: "true"
     fluxcd.io/health-check: "true"
 spec:
-  suspend: true
+  suspend: false
   chart:
     spec:
       chart: kube-prometheus-stack
@@ -19,17 +19,17 @@ spec:
         namespace: flux-system
   interval: 10s
   targetNamespace: monitoring
-  # values:
-  #   grafana:
-  #     adminPassword: admin
-  #     adminUser: admin
-  #     service:
-  #       enabled: true
-  #       type: ClusterIP
-  #     replicas: 1
-  #     persistence:
-  #       enabled: true
-  #       storageClassName: standard
-  #       accessModes:
-  #         - ReadWriteOnce
-  #       size: 10Gi
+  values:
+    grafana:
+      adminPassword: admin
+      adminUser: admin
+      service:
+        enabled: true
+        type: ClusterIP
+      replicas: 1
+      persistence:
+        enabled: true
+        storageClassName: standard
+        accessModes:
+          - ReadWriteOnce
+        size: 10Gi
