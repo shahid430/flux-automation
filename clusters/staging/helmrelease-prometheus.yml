@@ -20,6 +20,8 @@ spec:
       service:
         type: NodePort
         nodePort: 32005
+      adminUser: admin
+      adminPassword: admin
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
