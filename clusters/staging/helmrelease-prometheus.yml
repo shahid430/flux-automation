@@ -7,25 +7,14 @@ metadata:
   annotations:
     fluxcd.io/automated: "true"
     fluxcd.io/health-check: "true"
-spec: 
+spec:
   chart:
     spec:
-      chart: kube-prometheus-stack
-      version: "77.5.0" # set desired version
+      chart: ./manifests/dev/monitoring/kube-prometheus-stack
+      reconcileStrategy: ChartVersion
       sourceRef:
-        kind: HelmRepository
-        name: kube-prometheus-stack
+        kind: GitRepository
+        name: infra
         namespace: flux-system
   interval: 10s
   targetNamespace: monitoring
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: kube-prometheus-stack
-  namespace: flux-system
-spec:
-  interval: 1m0s
-  url: https://prometheus-community.github.io/helm-charts
-
-

@@ -130,6 +130,7 @@ need to instead set `global.imageRegistry`.
 | `initChownData.image.sha`                 | init-chown-data container image sha (optional)| `""`                                                    |
 | `initChownData.image.pullPolicy`          | init-chown-data container image pull policy   | `IfNotPresent`                                          |
 | `initChownData.resources`                 | init-chown-data pod resource requests & limits | `{}`                                                   |
+| `initChownData.securityContext`           | init-chown-data pod securityContext           | `{"readOnlyRootFilesystem": false, "runAsNonRoot": false}`, "runAsUser": 0, "seccompProfile": {"type": "RuntimeDefault"}, "capabilities": {"add": ["CHOWN"], "drop": ["ALL"]}}` |
 | `schedulerName`                           | Alternate scheduler name                      | `nil`                                                   |
 | `env`                                     | Extra environment variables passed to pods    | `{}`                                                    |
 | `envValueFrom`                            | Environment variables from alternate sources. See the API docs on [EnvVarSource](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#envvarsource-v1-core) for format details. Can be templated | `{}` |
@@ -150,6 +151,7 @@ need to instead set `global.imageRegistry`.
 | `alerting`                                | Configure grafana alerting (passed through tpl) | `{}`                                                  |
 | `notifiers`                               | Configure grafana notifiers                   | `{}`                                                    |
 | `dashboardProviders`                      | Configure grafana dashboard providers         | `{}`                                                    |
+| `defaultCurlOptions`                      | Configure default curl short options for all dashboards, the beginning dash is required  | `-skf`       |
 | `dashboards`                              | Dashboards to import                          | `{}`                                                    |
 | `dashboardsConfigMaps`                    | ConfigMaps reference that contains dashboards | `{}`                                                    |
 | `grafana.ini`                             | Grafana's primary configuration               | `{}`                                                    |
@@ -166,13 +168,15 @@ need to instead set `global.imageRegistry`.
 | `lifecycleHooks`                          | Lifecycle hooks for podStart and preStop [Example](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/#define-poststart-and-prestop-handlers)     | `{}`                                                    |
 | `sidecar.image.registry`                  | Sidecar image registry                        | `quay.io`                          |
 | `sidecar.image.repository`                | Sidecar image repository                      | `kiwigrid/k8s-sidecar`                          |
-| `sidecar.image.tag`                       | Sidecar image tag                             | `1.30.0`                                                |
+| `sidecar.image.tag`                       | Sidecar image tag                             | `1.30.10`                                                |
 | `sidecar.image.sha`                       | Sidecar image sha (optional)                  | `""`                                                    |
 | `sidecar.imagePullPolicy`                 | Sidecar image pull policy                     | `IfNotPresent`                                          |
 | `sidecar.resources`                       | Sidecar resources                             | `{}`                                                    |
 | `sidecar.securityContext`                 | Sidecar securityContext                       | `{}`                                                    |
 | `sidecar.enableUniqueFilenames`           | Sets the kiwigrid/k8s-sidecar UNIQUE_FILENAMES environment variable. If set to `true` the sidecar will create unique filenames where duplicate data keys exist between ConfigMaps and/or Secrets within the same or multiple Namespaces. | `false`                           |
 | `sidecar.alerts.enabled`             | Enables the cluster wide search for alerts and adds/updates/deletes them in grafana |`false`       |
+| `sidecar.alerts.env`                 | Extra environment variables passed to pods    | `{}`                                                    |
+| `sidecar.alerts.envValueFrom`        | Environment variables from alternate sources. See the API docs on [EnvVarSource](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#envvarsource-v1-core) for format details. Can be templated | `{}` |
 | `sidecar.alerts.label`               | Label that config maps with alerts should have to be added (can be templated) | `grafana_alert`                               |
 | `sidecar.alerts.labelValue`          | Label value that config maps with alerts should have to be added (can be templated) | `""`                                |
 | `sidecar.alerts.searchNamespace`     | Namespaces list. If specified, the sidecar will search for alerts config-maps  inside these namespaces. Otherwise the namespace in which the sidecar is running will be used. It's also possible to specify ALL to search in all namespaces. | `nil`                               |
@@ -183,6 +187,8 @@ need to instead set `global.imageRegistry`.
 | `sidecar.alerts.initAlerts`          | Set to true to deploy the alerts sidecar as an initContainer. This is needed if skipReload is true, to load any alerts defined at startup time. | `false` |
 | `sidecar.alerts.extraMounts`         | Additional alerts sidecar volume mounts. | `[]`                               |
 | `sidecar.dashboards.enabled`              | Enables the cluster wide search for dashboards and adds/updates/deletes them in grafana | `false`       |
+| `sidecar.dashboards.env`                  | Extra environment variables passed to pods    | `{}`                                                    |
+| `sidecar.dashboards.envValueFrom`         | Environment variables from alternate sources. See the API docs on [EnvVarSource](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#envvarsource-v1-core) for format details. Can be templated | `{}` |
 | `sidecar.dashboards.SCProvider`           | Enables creation of sidecar provider          | `true`                                                  |
 | `sidecar.dashboards.provider.name`        | Unique name of the grafana provider           | `sidecarProvider`                                       |
 | `sidecar.dashboards.provider.orgid`       | Id of the organisation, to which the dashboards should be added | `1`                                   |
@@ -395,7 +401,16 @@ dashboards:
       - name: DS_LOKI
         value: Loki
     local-dashboard:
-      url: https://raw.githubusercontent.com/user/repository/master/dashboards/dashboard.json
+      url: https://github.com/cloudnative-pg/grafana-dashboards/blob/main/charts/cluster/grafana-dashboard.json
+      # redirects to:
+      # https://raw.githubusercontent.com/cloudnative-pg/grafana-dashboards/refs/heads/main/charts/cluster/grafana-dashboard.json
+
+      # default: -skf
+      # -s  - silent mode
+      # -k  - allow insecure (eg: non-TLS) connections
+      # -f  - fail fast
+      # -L  - follow HTTP redirects
+      curlOptions: -Lf
 ```
 
 ## BASE64 dashboards
@@ -784,3 +799,6 @@ grafana.ini:
   alerting:
     enabled: false
 ```
+
+### Installing plugins
+For installing plugins please see the [official documentation](https://grafana.com/docs/grafana/latest/administration/plugin-management/#install-plugins-using-the-grafana-helm-chart).
