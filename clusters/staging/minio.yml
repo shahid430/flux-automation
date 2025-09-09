@@ -1,25 +1,34 @@
 ---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: minio
+  namespace: flux-system
+spec:
+  url: https://charts.min.io/
+  interval: 10m
+---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: minio
   namespace: flux-system
 spec:
+  interval: 10m
+  targetNamespace: minio
   chart:
     spec:
-      chart: ./manifests/dev/infra/minio
-      reconcileStrategy: ChartVersion
+      chart: minio
+      version: "5.0.15" # Use the latest stable version if needed
       sourceRef:
-        kind: GitRepository
-        name: flux-system
+        kind: HelmRepository
+        name: minio
         namespace: flux-system
-        # kind: HelmRepository
-        # name: prometheus-community
-  interval: 10s
-  targetNamespace: minio
   values:
-    accessKey: minioadmin
-    secretKey: minioadmin
+    mode: standalone           # Ensures a single instance
+    replicas: 1                # Only one pod
+    rootUser: minioadmin       # Username for MinIO UI/API
+    rootPassword: minioadmin   # Password for MinIO UI/API
     persistence:
       enabled: true
       size: 10Gi
@@ -28,8 +37,7 @@ spec:
       type: NodePort
       nodePort: 30007
       port: 9000
-    console:
+    consoleService:
       type: NodePort
       nodePort: 30008
       port: 9001
-    model: standalone
