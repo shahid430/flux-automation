@@ -41,3 +41,11 @@ spec:
       type: NodePort
       nodePort: 30008
       port: 9001
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "1000m"
+      limits:
+        memory: "4Gi"
+        cpu: "1000m"
+        
