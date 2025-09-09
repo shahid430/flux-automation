@@ -30,17 +30,5 @@ spec:
         namespace: flux-system
   values:
     harborAdminPassword: "Welcome@123" # Change this to a secure password
-    persistence:
-      enabled: true
-      resourcePolicy: keep
-      persistentVolumeClaim:
-        registry:
-          storageClass: "standard"
-          accessMode: ReadWriteOnce
-          size: 20Gi
-        chartmuseum:  
-          storageClass: "standard"
-          accessMode: ReadWriteOnce
-          size: 10Gi
 
     
