@@ -24,8 +24,16 @@ spec:
         nodePort: 32005
       adminUser: admin
       adminPassword: admin123
-          
----
+      datasources:
+        datasources.yaml:
+          apiVersion: 1
+    datasources:
+      enabled: true
+      defaultDatasourceEnabled: false
+      isDefaultDatasource: false
+      name: Prometheus
+      uid: prometheus
+# ---
 # apiVersion: source.toolkit.fluxcd.io/v1
 # kind: HelmRepository
 # metadata:
