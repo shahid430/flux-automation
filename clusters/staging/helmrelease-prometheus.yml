@@ -24,6 +24,32 @@ spec:
         nodePort: 32005
       adminUser: admin
       adminPassword: admin
+      ingress:
+        enabled: false
+    prometheus:
+      prometheusSpec:
+        serviceMonitorSelectorNilUsesHelmValues: false
+        ruleSelectorNilUsesHelmValues: false
+        retention: 10d
+        serviceAccountName: prometheus-kube-prometheus-stack
+    alertmanager:
+      alertmanagerSpec:
+        serviceAccountName: alertmanager-kube-prometheus-stack
+        retention: 10d
+    kubeStateMetrics:
+      enabled: true
+    nodeExporter:
+      enabled: true
+    defaultRules:
+      create: true
+    prometheusOperator:
+      createCustomResource: true
+      admissionWebhooks:
+        patch:
+          enabled: false
+        create:
+          enabled: false
+          
 ---
 # apiVersion: source.toolkit.fluxcd.io/v1
 # kind: HelmRepository
