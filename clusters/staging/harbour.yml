@@ -29,21 +29,6 @@ spec:
         name: harbor
         namespace: flux-system
   values:
-    expose:
-      type: ingress
-      ingress:
-        hosts:
-          core: harbor.staging.example.com
-          notary: notary.harbor.staging.example.com
-        annotations:
-          kubernetes.io/ingress.class: nginx
-          cert-manager.io/cluster-issuer: letsencrypt-prod
-        tls:
-          - secretName: harbor-tls
-            hosts:
-              - harbor.staging.example.com
-              - notary.harbor.staging.example.com
-    externalURL: https://harbor.staging.example.com
     harborAdminPassword: "Welcome@123" # Change this to a secure password
     persistence:
       enabled: true
