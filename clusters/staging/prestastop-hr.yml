@@ -49,3 +49,10 @@ metadata:
 spec:
   interval: 1h
   url: https://charts.bitnami.com/bitnami
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: prestashop
+  labels:
+    name: prestashop
