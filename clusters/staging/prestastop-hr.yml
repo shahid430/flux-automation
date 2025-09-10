@@ -1,0 +1,51 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: presta-db
+  namespace: prestashop
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: mariadb-galera
+      version: "*"
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: flux-system
+  values:
+    rootUser:
+      password: DB_ROOT_PASS
+    db:
+      user: prestashop
+      password: PRESTA_DB_PASS
+      name: prestashop_db
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: presta-redis
+  namespace: prestashop
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: redis
+      version: "*"
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: flux-system
+  values:
+    auth:
+      password: REDIS_PASSWORD
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: bitnami
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://charts.bitnami.com/bitnami
