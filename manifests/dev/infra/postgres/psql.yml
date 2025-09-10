@@ -23,14 +23,11 @@ spec:
             - containerPort: 5432
           env:
             - name: POSTGRES_DB
-              value: cman
+              value: demo
             - name: POSTGRES_USER
-              value: cman
+              value: admin
             - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: psql-secret
-                  key: POSTGRES_PASSWORD
+              vaule: admin123
           volumeMounts:
             - name: psql
               mountPath: /var/lib/postgresql/data
