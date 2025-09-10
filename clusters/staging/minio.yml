@@ -19,7 +19,8 @@ spec:
   chart:
     spec:
       chart: minio
-      version: "5.4.0" # Use the latest stable version if needed
+      # version: "5.4.0" # Use the latest stable version if needed
+      reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
         name: minio
