@@ -18,7 +18,7 @@ spec:
   targetNamespace: minio
   chart:
     spec:
-      chart: manifests/dev/infra/minio
+      chart: ./manifests/dev/infra/minio
       reconcileStrategy: ChartVersion  # Replace with the desired chart version or use a variable
       sourceRef:
         kind: GitRepository
