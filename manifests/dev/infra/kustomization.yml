@@ -4,6 +4,5 @@ kind: Kustomization
 metadata:
   name: flux-system
 resources:
-  - postgres
   - mongodb
     #  - minio
