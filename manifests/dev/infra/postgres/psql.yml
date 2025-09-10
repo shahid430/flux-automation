@@ -28,6 +28,13 @@ spec:
               value: admin
             - name: POSTGRES_PASSWORD
               vaule: admin123
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
           volumeMounts:
             - name: psql
               mountPath: /var/lib/postgresql/data
