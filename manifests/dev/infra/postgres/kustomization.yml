@@ -1,7 +1,0 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-  - psql.yml
-  - psql-sealed-secret.yml
-  - namespace.yml
-  - service.yml
