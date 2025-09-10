@@ -1,12 +1,12 @@
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: minio
-  namespace: flux-system
-spec:
-  url: https://charts.min.io/
-  interval: 10m
+# ---
+# apiVersion: source.toolkit.fluxcd.io/v1
+# kind: HelmRepository
+# metadata:
+#   name: minio
+#   namespace: flux-system
+# spec:
+#   url: https://charts.min.io/
+#   interval: 10m
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -18,10 +18,10 @@ spec:
   targetNamespace: minio
   chart:
     spec:
-      chart: minio
-      version: "5.0.15" # Use the latest stable version if needed
+      chart: manifests/dev/infra/minio
+      reconcileStrategy: ChartVersion  # Replace with the desired chart version or use a variable
       sourceRef:
-        kind: HelmRepository
+        kind: GitRepository
         name: minio
         namespace: flux-system
   values:
