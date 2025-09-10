@@ -19,7 +19,7 @@ spec:
   chart:
     spec:
       chart: minio
-      version: "8.0.10" # Use the latest stable version if needed
+      version: "5.0.15" # Use the latest stable version if needed
       sourceRef:
         kind: HelmRepository
         name: minio
