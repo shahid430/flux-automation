@@ -1,5 +1,6 @@
 CICD pipeline for minikube cluster on local machine:
 
+
 1) Start a new Minikube cluster with specific resources and API server options
 minikube start
 --driver=docker \ # Use Docker as the VM driver --cpus=4 --memory=8192 \ # Allocate 4 vCPUs and 8GB RAM to the cluster --kubernetes-version=v1.31.0 \ # Specify Kubernetes version (change as needed) --extra-config=apiserver.authorization-mode=Node,RBAC \ # Enable Node & RBAC authorization modes --extra-config=apiserver.enable-admission-plugins=MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota,LimitRanger,NamespaceLifecycle,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds \
