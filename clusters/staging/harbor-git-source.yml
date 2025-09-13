@@ -58,7 +58,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5s
-  path: ./clusters/dev/harbor
+  path: ./clusters/staging
   prune: true
   wait: false
   timeout: 1m0s
