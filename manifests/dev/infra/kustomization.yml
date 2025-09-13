@@ -6,4 +6,4 @@ metadata:
 resources:
   - mongodb
     #  - minio
-  - harbor
+    #  - harbor
