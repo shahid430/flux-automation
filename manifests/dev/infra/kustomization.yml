@@ -5,5 +5,4 @@ metadata:
   name: flux-system
 resources:
   - mongodb
-    #  - minio
-    #  - harbor
+  - harbor
