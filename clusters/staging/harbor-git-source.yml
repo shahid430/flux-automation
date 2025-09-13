@@ -21,7 +21,7 @@ spec:
   chart:
     spec:
       # <— this is the chart DIR path inside your Git repo
-      chart: ./manifests/dev/harbor/v1
+      chart: ./manifests/dev/harbor/v1/harbor
       sourceRef:
         kind: GitRepository
         name: harbor
