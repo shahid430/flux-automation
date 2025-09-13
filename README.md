@@ -1,15 +1,20 @@
 CICD pipeline for minikube cluster on local machine:
 
-
 1) Start a new Minikube cluster with specific resources and API server options
 minikube start
---driver=docker \ # Use Docker as the VM driver --cpus=4 --memory=8192 \ # Allocate 4 vCPUs and 8GB RAM to the cluster --kubernetes-version=v1.31.0 \ # Specify Kubernetes version (change as needed) --extra-config=apiserver.authorization-mode=Node,RBAC \ # Enable Node & RBAC authorization modes --extra-config=apiserver.enable-admission-plugins=MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota,LimitRanger,NamespaceLifecycle,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds \
-# Enable key admission controllers in the API server --extra-config=apiserver.audit-log-path=/var/log/kube-apiserver-audit.log \ # Path for API server audit logs --extra-config=apiserver.audit-log-maxage=5 \ # Keep audit logs for 5 days --extra-config=apiserver.audit-log-maxsize=100 # Max size of each audit log file (MB)
+    --driver=docker \ # Use Docker as the VM driver
+    --cpus=4 --memory=8192 \ # Allocate 4 vCPUs and 8GB RAM to the cluster
+    --kubernetes-version=v1.31.0 \ # Specify Kubernetes version (change as needed)
+    --extra-config=apiserver.authorization-mode=Node,RBAC \ # Enable Node & RBAC authorization modes
+    --extra-config=apiserver.enable-admission-plugins=MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota,LimitRanger,NamespaceLifecycle,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds \   
+    --extra-config=apiserver.audit-log-path=/var/log/kube-apiserver-audit.log \ # Path for API server audit logs
+    --extra-config=apiserver.audit-log-maxage=5 \ # Keep audit logs for 5 days
+    --extra-config=apiserver.audit-log-maxsize=100 # Max size of each audit log file (MB)
 
-2) Enable useful Minikube addons, these are optional based on your requirement.
+3) Enable useful Minikube addons, these are optional based on your requirement.
 minikube addons enable metrics-server # Metrics server for resource metrics (used by HPA, etc.) minikube addons enable dashboard # Kubernetes Dashboard UI minikube addons enable ingress # NGINX ingress controller minikube addons enable registry # Local Docker registry inside the cluster
 
-3) Validate the cluster and addons
+4) Validate the cluster and addons
 kubectl get nodes # Check that the Minikube node is ready kubectl get pods -A # Check that all system and addon pods are running minikube addons list | grep -E 'metrics-server|dashboard|ingress|registry' # Verify addons enabled Output:
 
 | dashboard | minikube | disabled | Kubernetes | | ingress | minikube | disabled | Kubernetes | | ingress-dns | minikube | disabled | minikube | | metrics-server | minikube | disabled | Kubernetes | | registry | minikube | disabled | minikube | | registry-aliases | minikube | disabled | 3rd party (unknown) | | registry-creds | minikube | disabled | 3rd party (UPMC Enterprises) |
