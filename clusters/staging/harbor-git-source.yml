@@ -21,7 +21,6 @@ spec:
   prune: true
   timeout: 1m0s
   wait: false
-  namespace: harbor
   sourceRef:
     kind: GitRepository
     name: harbor
