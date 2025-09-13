@@ -1,6 +1,7 @@
 CICD pipeline for minikube cluster on local machine:
 ****************************************************
 
+
 # 1) Start a new Minikube cluster with specific resources and API server options
 minikube start \
   --driver=docker \                                # Use Docker as the VM driver
