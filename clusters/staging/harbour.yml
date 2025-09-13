@@ -3,6 +3,15 @@ kind: Namespace
 metadata:
   name: harbor
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor-admin
+  namespace: harbor
+type: Opaque
+stringData:
+  HARBOR_ADMIN_PASSWORD: "Admin$@2025"
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
@@ -28,5 +37,17 @@ spec:
         kind: HelmRepository
         name: harbor
         namespace: flux-system
+  install:
+    createNamespace: false
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
   values:
-    harborAdminPassword: "Welcome@123" # Change this to a secure password
+    # harborAdminPassword: "Welcome@123" # Change this to a secure password
+    existingSecretAdminPassword: harbor-admin
+    existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
+    persistence:
+      enabled: true
+      resourcePolicy: keep
