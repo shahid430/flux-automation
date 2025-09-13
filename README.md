@@ -15,9 +15,9 @@ minikube start
 minikube addons enable metrics-server # Metrics server for resource metrics (used by HPA, etc.) minikube addons enable dashboard # Kubernetes Dashboard UI minikube addons enable ingress # NGINX ingress controller minikube addons enable registry # Local Docker registry inside the cluster
 
 4) Validate the cluster and addons
-kubectl get nodes # Check that the Minikube node is ready kubectl get pods -A # Check that all system and addon pods are running minikube addons list | grep -E 'metrics-server|dashboard|ingress|registry' # Verify addons enabled Output:
-
-| dashboard | minikube | disabled | Kubernetes | | ingress | minikube | disabled | Kubernetes | | ingress-dns | minikube | disabled | minikube | | metrics-server | minikube | disabled | Kubernetes | | registry | minikube | disabled | minikube | | registry-aliases | minikube | disabled | 3rd party (unknown) | | registry-creds | minikube | disabled | 3rd party (UPMC Enterprises) |
+kubectl get nodes                                                                 # Check that the Minikube node is ready
+kubectl get pods -A                                                               # Check that all system and addon pods are running
+minikube addons list | grep -E 'metrics-server|dashboard|ingress|registry'        # Verify addons enabled
 
 Check your minikube ip to use it for nodeport services. minikube ip # Get Minikube cluster IP
 ################## Completed Kubernetes cluster deployment ##################### Lets build the applications now with FluxCD automation.
