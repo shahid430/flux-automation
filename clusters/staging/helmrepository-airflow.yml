@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: airflow
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: apache-airflow
+  namespace: flux-system
+spec:
+  url: https://airflow.apache.org
+  interval: 10m
+---
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: airflow
+  namespace: flux-system
+spec:
+  interval: 10m
+  targetNamespace: airflow
+  chart:
+    spec:
+      chart: airflow
+      version: "1.13.0" # Use the desired version, check ArtifactHub for latest
+      sourceRef:
+        kind: HelmRepository
+        name: apache-airflow
+        namespace: flux-system
+  values:
+    executor: LocalExecutor
+    airflow:
+      users:
+        - username: admin
+          password: admin
+          role: Admin
+    web:
+      service:
+        type: NodePort
+        nodePort: 30080
