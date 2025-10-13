@@ -11,7 +11,7 @@ spec:
       version: "1.2.7"
       sourceRef:
         kind: HelmRepository
-        name: zabbix-charts
+        name: zabbix-community
         namespace: flux-system
   interval: 10m
   targetNamespace: monitoring
@@ -29,8 +29,8 @@ spec:
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: zabbix-charts
+  name: zabbix-community
   namespace: flux-system
 spec:
-  url: https://github.com/zabbix-community/helm-zabbix/tree/main/charts/zabbix
+  url: https://zabbix-community.github.io/helm-zabbix
   interval: 10m
