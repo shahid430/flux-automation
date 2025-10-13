@@ -36,10 +36,10 @@ spec:
           apiVersion: 1
     Prometheus:
       prometheusSpec:
-        storageSpec:
+        storageClassName: standard
+        storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: standard
               accessModes: ["ReadWriteOnce"]
               resources:
                 requests:
