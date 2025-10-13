@@ -34,21 +34,31 @@ spec:
       datasources:
         datasources.yaml:
           apiVersion: 1
-    prometheus:
+    Prometheus:
       prometheusSpec:
-        replicas: 1
-        retention: 15d              # adjust as needed
-        walCompression: true
         storageSpec:
           volumeClaimTemplate:
-            metadata:
-              name: prometheus-data
             spec:
-              storageClassName: standard   # minikube's default (hostPath)
-              accessModes: [ "ReadWriteOnce" ]
+              storageClassName: standard
+              accessModes: ["ReadWriteOnce"]
               resources:
                 requests:
-                  storage: 20Gi 
+                  storage: 10Gi
+    # prometheus:
+    #   prometheusSpec:
+    #     replicas: 1
+    #     retention: 15d              # adjust as needed
+    #     walCompression: true
+    #     storageSpec:
+    #       volumeClaimTemplate:
+    #         metadata:
+    #           name: prometheus-data
+    #         spec:
+    #           storageClassName: standard   # minikube's default (hostPath)
+    #           accessModes: [ "ReadWriteOnce" ]
+    #           resources:
+    #             requests:
+    #               storage: 20Gi 
     datasources:
       enabled: true
       defaultDatasourceEnabled: false
