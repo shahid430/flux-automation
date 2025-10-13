@@ -29,8 +29,8 @@ spec:
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: bitnami
+  name: zabbix-charts
   namespace: flux-system
 spec:
-  url: https://charts.bitnami.com/bitnami
+  url: https://github.com/zabbix-community/helm-zabbix/tree/main/charts/zabbix
   interval: 10m
