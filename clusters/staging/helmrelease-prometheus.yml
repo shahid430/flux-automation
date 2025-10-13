@@ -24,6 +24,8 @@ spec:
         nodePort: 32005
       adminUser: admin
       adminPassword: admin123
+      plugins:
+        - alexanderzobnin-zabbix-app
       datasources:
         datasources.yaml:
           apiVersion: 1
