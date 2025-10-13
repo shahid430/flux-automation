@@ -18,6 +18,11 @@ spec:
   interval: 10s
   targetNamespace: monitoring
   values:
+    prometheus: 
+      persistance:
+        enabled: true
+        size: 10Gi
+        storageClass: standard
     grafana:
       service:
         type: NodePort
@@ -29,6 +34,21 @@ spec:
       datasources:
         datasources.yaml:
           apiVersion: 1
+    prometheus:
+      prometheusSpec:
+        replicas: 1
+        retention: 15d              # adjust as needed
+        walCompression: true
+        storageSpec:
+          volumeClaimTemplate:
+            metadata:
+              name: prometheus-data
+            spec:
+              storageClassName: standard   # minikube's default (hostPath)
+              accessModes: [ "ReadWriteOnce" ]
+              resources:
+                requests:
+                  storage: 20Gi 
     datasources:
       enabled: true
       defaultDatasourceEnabled: false
