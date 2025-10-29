@@ -16,7 +16,7 @@ metadata:
 spec:
   interval: 10m
   targetNamespace: minio
-  suspend: true
+  suspend: false
   chart:
     spec:
       chart: minio
