@@ -462,7 +462,17 @@ mimir:
   #         secret_access_key: "${AWS_SECRET_ACCESS_KEY}" # This is a secret injected via an environment variable
   #         http:
   #           insecure_skip_verify: true
-  structuredConfig: {}
+  structuredConfig: 
+    common:
+      storage:
+        backend: s3
+        s3:
+          bucket_name: "${BUCKET_NAME}"
+          endpoint: "${BUCKET_HOST}:${BUCKET_PORT}"
+          access_key_id: "${AWS_ACCESS_KEY_ID}" # This is a secret injected via an environment variable
+          secret_access_key: "${AWS_SECRET_ACCESS_KEY}" # This is a secret injected via an environment variable
+          http:
+            insecure_skip_verify: true
 
 # -- runtimeConfig provides a reloadable runtime configuration. Changing the runtimeConfig doesn't require a restart of all components.
 # For more infromation see https://grafana.com/docs/mimir/latest/configure/about-runtime-configuration/
@@ -792,7 +802,7 @@ alertmanager:
     maxUnavailable: 2
     # -- topologyKey to use in pod anti-affinity. If unset, no anti-affinity rules are generated. If set, the generated anti-affinity rule makes sure that pods from different zones do not mix.
     # E.g.: topologyKey: 'kubernetes.io/hostname'
-    topologyKey: null
+    topologyKey: kubernetes.io/hostname
     # -- Auxiliary values for migration, see https://grafana.com/docs/helm-charts/mimir-distributed/latest/migration-guides/migrate-from-single-zone-with-helm/
     migration:
       # -- Indicate if migration is ongoing for multi zone alertmanager
@@ -1159,7 +1169,7 @@ ingester:
     maxUnavailable: 50
     # -- topologyKey to use in pod anti-affinity. If unset, no anti-affinity rules are generated. If set, the generated anti-affinity rule makes sure that pods from different zones do not mix.
     # E.g.: topologyKey: 'kubernetes.io/hostname'
-    topologyKey: null
+    topologyKey: kubernetes.io/hostname
     # -- Auxiliary values for migration, see https://grafana.com/docs/helm-charts/mimir-distributed/latest/migration-guides/migrate-from-single-zone-with-helm/
     migration:
       # -- Indicate if migration is ongoing for multi zone ingester
@@ -2316,7 +2326,7 @@ store_gateway:
     maxUnavailable: 50
     # -- topologyKey to use in pod anti-affinity. If unset, no anti-affinity rules are generated. If set, the generated anti-affinity rule makes sure that pods from different zones do not mix.
     # E.g.: topologyKey: 'kubernetes.io/hostname'
-    topologyKey: null
+    topologyKey: kubernetes.io/hostname
     # -- Auxiliary values for migration, see https://grafana.com/docs/helm-charts/mimir-distributed/latest/migration-guides/migrate-from-single-zone-with-helm/
     migration:
       # -- Indicate if migration is ongoing for multi zone store-gateway
@@ -3016,7 +3026,7 @@ rollout_operator:
     allowPrivilegeEscalation: false
 
 minio:
-  enabled: true
+  enabled: false
   mode: standalone
   rootUser: grafana-mimir
   buckets:
