@@ -462,17 +462,7 @@ mimir:
   #         secret_access_key: "${AWS_SECRET_ACCESS_KEY}" # This is a secret injected via an environment variable
   #         http:
   #           insecure_skip_verify: true
-  structuredConfig: 
-    common:
-      storage:
-        backend: s3
-        s3:
-          bucket_name: "mimir-blocks"
-          endpoint: "minio-minio.minio.svc.cluster.local:9000"
-          access_key_id: "minioadmin" # This is a secret injected via an environment variable
-          secret_access_key: "minioadmin" # This is a secret injected via an environment variable
-          http:
-            insecure_skip_verify: true
+  structuredConfig: {}
 
 # -- runtimeConfig provides a reloadable runtime configuration. Changing the runtimeConfig doesn't require a restart of all components.
 # For more infromation see https://grafana.com/docs/mimir/latest/configure/about-runtime-configuration/
@@ -574,7 +564,7 @@ kedaAutoscaling:
     #   name: my-secret-name
     #   parameter: password
 alertmanager:
-  enabled: false
+  enabled: true
   # -- Total number of replicas for the alertmanager across all availability zones
   # If alertmanager.zoneAwareReplication.enabled=false, this number is taken as is.
   # Otherwise each zone starts `ceil(replicas / number_of_zones)` number of pods.
@@ -802,7 +792,7 @@ alertmanager:
     maxUnavailable: 2
     # -- topologyKey to use in pod anti-affinity. If unset, no anti-affinity rules are generated. If set, the generated anti-affinity rule makes sure that pods from different zones do not mix.
     # E.g.: topologyKey: 'kubernetes.io/hostname'
-    topologyKey: kubernetes.io/hostname
+    topologyKey: null
     # -- Auxiliary values for migration, see https://grafana.com/docs/helm-charts/mimir-distributed/latest/migration-guides/migrate-from-single-zone-with-helm/
     migration:
       # -- Indicate if migration is ongoing for multi zone alertmanager
@@ -1006,7 +996,7 @@ ingester:
   # If ingester.zoneAwareReplication.enabled=false, this number is taken as is.
   # Otherwise each zone starts `ceil(replicas / number_of_zones)` number of pods.
   #   E.g. if 'replicas' is set to 4 and there are 3 zones, then 4/3=1.33 and after rounding up it means 2 pods per zone are started.
-  replicas: 3
+  replicas: 1
 
   statefulSet:
     enabled: true
@@ -1169,7 +1159,7 @@ ingester:
     maxUnavailable: 50
     # -- topologyKey to use in pod anti-affinity. If unset, no anti-affinity rules are generated. If set, the generated anti-affinity rule makes sure that pods from different zones do not mix.
     # E.g.: topologyKey: 'kubernetes.io/hostname'
-    topologyKey: kubernetes.io/hostname
+    topologyKey: null
     # -- Auxiliary values for migration, see https://grafana.com/docs/helm-charts/mimir-distributed/latest/migration-guides/migrate-from-single-zone-with-helm/
     migration:
       # -- Indicate if migration is ongoing for multi zone ingester
@@ -1484,7 +1474,7 @@ ruler_querier:
     # repository: grafana/mimir
     # tag: 2.16.0
 
-  replicas: 2
+  replicas: 1
 
   # -- [Experimental] Configure autoscaling via KEDA (https://keda.sh). This requires having
   # KEDA already installed in the Kubernetes cluster. The metrics for scaling are read
@@ -1722,7 +1712,7 @@ ruler_query_scheduler:
     # repository: grafana/mimir
     # tag: 2.16.0
 
-  replicas: 2
+  replicas: 1
 
   service:
     annotations: {}
@@ -1814,7 +1804,7 @@ querier:
     # repository: grafana/mimir
     # tag: 2.16.0
 
-  replicas: 2
+  replicas: 1
 
   # -- [Experimental] Configure autoscaling via KEDA (https://keda.sh). This requires having
   # KEDA already installed in the Kubernetes cluster. The metrics for scaling are read
@@ -2066,7 +2056,7 @@ query_scheduler:
     # repository: grafana/mimir
     # tag: 2.16.0
 
-  replicas: 2
+  replicas: 1
 
   service:
     annotations: {}
@@ -2326,7 +2316,7 @@ store_gateway:
     maxUnavailable: 50
     # -- topologyKey to use in pod anti-affinity. If unset, no anti-affinity rules are generated. If set, the generated anti-affinity rule makes sure that pods from different zones do not mix.
     # E.g.: topologyKey: 'kubernetes.io/hostname'
-    topologyKey: kubernetes.io/hostname
+    topologyKey: null
     # -- Auxiliary values for migration, see https://grafana.com/docs/helm-charts/mimir-distributed/latest/migration-guides/migrate-from-single-zone-with-helm/
     migration:
       # -- Indicate if migration is ongoing for multi zone store-gateway
@@ -3026,7 +3016,7 @@ rollout_operator:
     allowPrivilegeEscalation: false
 
 minio:
-  enabled: false
+  enabled: true
   mode: standalone
   rootUser: grafana-mimir
   buckets:
@@ -4436,7 +4426,7 @@ graphite:
 
   querier:
     # Setting it to null will produce a deployment without replicas set, allowing you to use autoscaling with the deployment
-    replicas: 2
+    replicas: 1
 
     schemasConfiguration:
       storageSchemas: |-
@@ -4527,7 +4517,7 @@ graphite:
     extraVolumeMounts: []
 
   write_proxy:
-    replicas: 2
+    replicas: 1
 
     service:
       annotations: {}
@@ -4753,7 +4743,7 @@ federation_frontend:
   disableOtherComponents: false
 
   # -- Number of replicas for the federation-frontend
-  replicas: 2
+  replicas: 1
   # -- Deployment strategy for the federation-frontend pods
   strategy:
     type: RollingUpdate
