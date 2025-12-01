@@ -37,7 +37,7 @@ spec:
     datasources:
       enabled: true
       defaultDatasourceEnabled: false
-      defaultDashboardsEditable: true
+      defaultDashboardsEditable: false
       isDefaultDatasource: false
       name: Prometheus
       uid: prometheus
