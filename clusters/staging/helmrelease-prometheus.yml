@@ -7,7 +7,7 @@ metadata:
 spec:
   chart:
     spec:
-      chart: ./manifests/dev/monitoring/kube-prometheus-stack
+      chart: ./manifests/dev/infra/kube-prometheus-stack
       version: "77.5.0"
       sourceRef:
         kind: GitRepository
