@@ -7,15 +7,16 @@ metadata:
 spec:
   chart:
     spec:
-      #      chart: ./manifests/dev/infra/kube-prometheus-stack
-      chart: kube-prometheus-stack
-      version: "77.5.0"
+      chart: ./manifests/dev/infra/kube-prometheus-stack
+        #chart: kube-prometheus-stack
+      reconcileStrategy: ChartVersion
+        #version: "77.5.0"
       sourceRef:
-        #        kind: GitRepository
-        #        name: infra
-        namespace: monitoring
-        kind: HelmRepository
-        name: prometheus-community
+        kind: GitRepository
+        name: infra
+          #namespace: monitoring
+          #kind: HelmRepository
+          #name: prometheus-community
   interval: 10s
   install:
     createNamespace: true
@@ -39,16 +40,6 @@ spec:
       adminPassword: admin123
       plugins:
         - alexanderzobnin-zabbix-app
-      sidecar:
-        datasources:
-          enabled: true
-      additionalDataSources:
-        - name: Prometheus
-          type: prometheus
-          access: proxy
-          url: http://kube-prometheus-stack-prometheus.monitoring.svc:9090
-          isDefault: true
-            #      datasources:
             #        datasources.yaml:
             #          apiVersion: 1
             #    datasources:
@@ -58,12 +49,23 @@ spec:
             #      isDefaultDatasource: false
             #      name: Prometheus
             #      uid: prometheus
- ---
- apiVersion: source.toolkit.fluxcd.io/v1
- kind: HelmRepository
- metadata:
-   name: prometheus-community
-   namespace: monitoring
- spec:
-   url: https://prometheus-community.github.io/helm-charts
-   interval: 10m
+ # ---
+ # apiVersion: source.toolkit.fluxcd.io/v1
+ # kind: HelmRepository
+ # metadata:
+ #   name: prometheus-community
+ #   namespace: monitoring
+ # spec:
+ #   url: https://prometheus-community.github.io/helm-charts
+ #   interval: 10m
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  url: https://github.com/shahid430/flux-automation
