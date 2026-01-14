@@ -13,8 +13,8 @@ spec:
         kind: GitRepository
         name: infra
         namespace: flux-system
-        # kind: HelmRepository
-        # name: prometheus-community
+        kind: HelmRepository
+        name: prometheus-community
   interval: 10s
   targetNamespace: monitoring
   values:
@@ -41,12 +41,12 @@ spec:
       isDefaultDatasource: false
       name: Prometheus
       uid: prometheus
-        # ---
-        # apiVersion: source.toolkit.fluxcd.io/v1
-        # kind: HelmRepository
-        # metadata:
-        #   name: prometheus-community
-        #   namespace: monitoring
-        # spec:
-        #   url: https://prometheus-community.github.io/helm-charts
-        #   interval: 10m
+ ---
+ apiVersion: source.toolkit.fluxcd.io/v1
+ kind: HelmRepository
+ metadata:
+   name: prometheus-community
+   namespace: monitoring
+ spec:
+   url: https://prometheus-community.github.io/helm-charts
+   interval: 10m
