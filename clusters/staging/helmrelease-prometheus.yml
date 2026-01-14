@@ -11,7 +11,7 @@ spec:
       version: "77.5.0"
       sourceRef:
         kind: GitRepository
-        name: flux-system
+        name: infra
         namespace: flux-system
         # kind: HelmRepository
         # name: prometheus-community
