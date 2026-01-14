@@ -8,21 +8,29 @@ spec:
   chart:
     spec:
       #      chart: ./manifests/dev/infra/kube-prometheus-stack
+      chart: kube-prometheus-stack
       version: "77.5.0"
       sourceRef:
         #        kind: GitRepository
         #        name: infra
-        namespace: flux-system
+        namespace: monitoring
         kind: HelmRepository
         name: prometheus-community
   interval: 10s
+  install:
+    createNamespace: true
   targetNamespace: monitoring
   values:
     prometheus: 
-      persistance:
-        enabled: true
-        size: 10Gi
-        storageClass: standard
+      prometheusSpec:
+        storageSpec: 
+          volumeClaimTemplate:
+            spec:
+              storageClassName: standard
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 10Gi
     grafana:
       service:
         type: NodePort
@@ -31,16 +39,25 @@ spec:
       adminPassword: admin123
       plugins:
         - alexanderzobnin-zabbix-app
-      datasources:
-        datasources.yaml:
-          apiVersion: 1
-    datasources:
-      enabled: true
-      defaultDatasourceEnabled: false
-      defaultDashboardsEditable: false
-      isDefaultDatasource: false
-      name: Prometheus
-      uid: prometheus
+      sidecar:
+        datasources:
+          enabled: true
+      additionalDataSources:
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          url: http://kube-prometheus-stack-prometheus.monitoring.svc:9090
+          isDefault: true
+            #      datasources:
+            #        datasources.yaml:
+            #          apiVersion: 1
+            #    datasources:
+            #      enabled: true
+            #      defaultDatasourceEnabled: false
+            #      defaultDashboardsEditable: false
+            #      isDefaultDatasource: false
+            #      name: Prometheus
+            #      uid: prometheus
  ---
  apiVersion: source.toolkit.fluxcd.io/v1
  kind: HelmRepository
