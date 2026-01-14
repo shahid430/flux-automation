@@ -7,11 +7,11 @@ metadata:
 spec:
   chart:
     spec:
-      chart: ./manifests/dev/infra/kube-prometheus-stack
+      #      chart: ./manifests/dev/infra/kube-prometheus-stack
       version: "77.5.0"
       sourceRef:
-        kind: GitRepository
-        name: infra
+        #        kind: GitRepository
+        #        name: infra
         namespace: flux-system
         kind: HelmRepository
         name: prometheus-community
