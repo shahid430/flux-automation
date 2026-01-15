@@ -23,7 +23,7 @@ spec:
       retries: 3
   values:
     override:
-      fullnameOverride: ""
+      fullnameOverride: "zabbix"
     service:
       type: NodePort
       nodePort: 32006
