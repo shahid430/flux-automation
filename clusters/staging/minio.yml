@@ -20,7 +20,7 @@ spec:
   chart:
     spec:
       chart: minio
-      version: "Security/CVE RELEASE.2025-10-15T17-29-55Z" # Use the latest stable version if needed
+      version: "8.0.10" # Use the latest stable version if needed
       #reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
