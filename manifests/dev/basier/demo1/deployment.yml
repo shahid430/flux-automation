@@ -14,7 +14,7 @@ metadata:
   name: demo1
   namespace: basier
 spec:
-  replicas: 3
+  replicas: 0
   selector:
     matchLabels:
       app: block-buster
