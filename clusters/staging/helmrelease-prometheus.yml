@@ -22,6 +22,7 @@ spec:
     createNamespace: true
   targetNamespace: monitoring
   values:
+    fullnameOverride: "fluxcd"
     prometheus: 
       prometheusSpec:
         storageSpec: 
