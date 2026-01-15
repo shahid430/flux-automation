@@ -32,7 +32,7 @@ spec:
     rootUser: minioadmin       # Username for MinIO UI/API
     rootPassword: minioadmin   # Password for MinIO UI/API
     persistence:
-      enabled: true
+      enabled: false
       size: 10Gi
       storageClass: standard
     service:
