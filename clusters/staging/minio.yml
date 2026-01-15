@@ -26,6 +26,12 @@ spec:
         kind: HelmRepository
         name: minio
         namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
   values:
     mode: standalone           # Ensures a single instance
     replicas: 1                # Only one pod
