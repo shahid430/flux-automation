@@ -22,8 +22,7 @@ spec:
     remediation:
       retries: 3
   values:
-    override:
-      fullnameOverride: "zabbix"
+    fullnameOverride: "zabbix"
     service:
       type: NodePort
       nodePort: 32006
