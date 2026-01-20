@@ -38,6 +38,3 @@ spec:
       auth:
         enabled: true
         password: "P@ssw0rd123"
-    extraEnvVars:
-      - name: DATABASE_URL
-        value: "postgres://devops:P@ssw0rd123@outline-outline-postgresql:5432/outline"
