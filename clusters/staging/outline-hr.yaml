@@ -33,4 +33,8 @@ spec:
         name: outline
         namespace: flux-system
   values:
-    # You can override values here or use the values.yaml in the chart
+    redis:
+      enabled: true
+      auth:
+        enabled: true
+        password: "P@ssw0rd123"
