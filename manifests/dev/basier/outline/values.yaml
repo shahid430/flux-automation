@@ -780,16 +780,15 @@ postgresql:
     persistence:
       # -- This is for setting up the persistence enabled.
       enabled: true
-      storageClassName: "standard"
       # -- This is for setting up the persistence existing claim.
       existingClaim: ""
 
   # -- This is for setting up the auth.
   auth:
     # -- This is for setting up the auth username.
-    username: "devops"
+    username: ""
     # -- This is for setting up the auth password.
-    password: "P@ssw0rd123"
+    password: ""
     # -- This is for setting up the auth database.
     database: outline
 
