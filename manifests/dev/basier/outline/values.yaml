@@ -76,7 +76,7 @@ service:
   # -- This sets the service enabled.
   enabled: true
   # -- This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
-  type: ClusterIP
+  type: NodePort
   # -- This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
   port: 3000
   # -- Default Service name
@@ -711,7 +711,7 @@ hostAliases: []
 # -- Bitnami Redis configuration
 redis:
   # -- Enable redis
-  enabled: false
+  enabled: true
   architecture: standalone
 
   image:
@@ -720,6 +720,7 @@ redis:
 
   auth:
     enabled: true
+    password: "P@ssw0rd123"
 
   master:
     service:
