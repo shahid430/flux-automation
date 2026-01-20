@@ -4,5 +4,5 @@ kind: Kustomization
 metadata:
   name: flux-system
 resources:
-  - values-custom.yaml
+  - values.yaml
   - Chart.yaml
