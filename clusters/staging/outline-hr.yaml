@@ -16,7 +16,7 @@ metadata:
   name: outline
   namespace: flux-system
 spec:
-  interval: 10m
+  interval: 10s
   targetNamespace: outline
   install:
     createNamespace: true
@@ -32,9 +32,3 @@ spec:
         kind: GitRepository
         name: outline
         namespace: flux-system
-  values:
-    redis:
-      enabled: true
-      auth:
-        enabled: true
-        password: "P@ssw0rd123"
