@@ -789,7 +789,7 @@ postgresql:
     # -- This is for setting up the auth username.
     username: ""
     # -- This is for setting up the auth password.
-    password: ""
+    password: "outlinepassword"
     # -- This is for setting up the auth database.
     database: outline
 
