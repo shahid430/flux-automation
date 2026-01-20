@@ -169,7 +169,7 @@ fileStorage:
     # -- This is for setting up the local file storage persistence.
     persistence:
       # -- This is for setting up the local file storage persistence enabled.
-      enabled: false
+      enabled: true
       # -- This is for setting up the local file storage persistence access modes.
       accessModes:
         - ReadWriteOnce
@@ -605,16 +605,16 @@ extraSecretNamesForEnvFrom: []
 # -- This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
   # -- This is for setting up the ingress enabled.
-  enabled: false
+  enabled: true
   # -- This is for setting up the ingress class name.
-  className: ""
+  className: "nginx"
   # -- This is for setting up the ingress annotations.
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   # -- This is for setting up the ingress hosts.
   hosts:
-    - host: outline.mydomain.com
+    - host: outline.yourdomain.com
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -720,7 +720,6 @@ redis:
 
   auth:
     enabled: true
-    password: "P@ssw0rd123"
 
   master:
     service:
@@ -783,13 +782,14 @@ postgresql:
       enabled: true
       # -- This is for setting up the persistence existing claim.
       existingClaim: ""
+      size: 8Gi
 
   # -- This is for setting up the auth.
   auth:
     # -- This is for setting up the auth username.
-    username: ""
+    username: "outline"
     # -- This is for setting up the auth password.
-    password: "outlinepassword"
+    password: "strongpassword"
     # -- This is for setting up the auth database.
     database: outline
 
