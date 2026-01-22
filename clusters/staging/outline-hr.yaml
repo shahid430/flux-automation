@@ -10,25 +10,20 @@ spec:
     branch: main
   url: https://github.com/shahid430/flux-automation
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
 metadata:
-  name: outline
+  name: basier
   namespace: flux-system
 spec:
-  interval: 10s
-  targetNamespace: outline
-  install:
-    createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    remediation:
-      retries: 3
-  chart:
-    spec:
-      chart: manifests/dev/basier/outline
-      sourceRef:
-        kind: GitRepository
-        name: outline
-        namespace: flux-system
+  commonMetadata:
+    labels:
+      environment: dev
+  interval: 5s
+  path: ./manifests/dev/basier/
+  prune: true
+  timeout: 1m0s
+  wait: false
+  sourceRef:
+    kind: GitRepository
+    name: basier
