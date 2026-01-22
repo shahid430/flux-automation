@@ -16,10 +16,10 @@ metadata:
   name: basier
   namespace: flux-system
 spec:
-  commonMetadata:
-    labels:
-      environment: dev
-  interval: 5s
+  #  commonMetadata:
+    #    labels:
+      #      environment: dev
+  interval: 10s
   path: ./manifests/dev/basier/
   prune: true
   timeout: 1m0s
@@ -27,3 +27,4 @@ spec:
   sourceRef:
     kind: GitRepository
     name: basier
+

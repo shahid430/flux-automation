@@ -11,16 +11,16 @@ metadata:
 type: Opaque
 stringData:
   # Outline secrets
-  SECRET_KEY: "3fce1d6b7b32e17c500ffa3d49db7cb615bed88f6d957dcf47f351db976ce940"
-  UTILS_SECRET: "e89851c5ad4bede8d06beed230d13ba24de8de405f64c2d6be0a9949a6e0c4c7"
+  SECRET_KEY: "4d73b711454c47b8365346dead3da86d4f0f3a2537ebda531f3f0dfec310334c"
+  UTILS_SECRET: "0bead7b5841be2cd9d31a34d1921beb1ded5eede61ac8f9fb52f1087075c6898"
 
   # Postgres credentials
   POSTGRES_USER: "outline"
-  POSTGRES_PASSWORD: "pass"
+  POSTGRES_PASSWORD: "Passw0rd123"
   POSTGRES_DB: "outline"
 
   # Connection strings (use Kubernetes service DNS names)
-  DATABASE_URL: "postgres://outline:pass@outline-postgres:5432/outline"
+  DATABASE_URL: "postgres://outline:Passw0rd123@outline-postgres:5432/outline"
   REDIS_URL: "redis://outline-redis:6379"
 ---
 apiVersion: v1
@@ -206,25 +206,8 @@ spec:
     - name: http
       port: 3000
       targetPort: 3000
-  type: ClusterIP
----
-# OPTIONAL: If you want to access Outline from outside the cluster without Ingress,
-# change Service type to NodePort (uncomment below) and remove the ClusterIP Service above.
-#
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: outline
-#   namespace: outline
-# spec:
-#   selector:
-#     app: outline
-#   ports:
-#     - name: http
-#       port: 3000
-#       targetPort: 3000
-#       nodePort: 30000
-#   type: NodePort
+      nodePort: 32040
+  type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -255,7 +238,7 @@ spec:
             # IMPORTANT:
             # If using port-forward, localhost works:
             - name: URL
-              value: "http://aidevops.online"
+              value: "http://localhost:3000"
 
             - name: FORCE_HTTPS
               value: "false"
@@ -314,44 +297,4 @@ spec:
         - name: outline-data
           persistentVolumeClaim:
             claimName: outline-storage-pvc
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: outline
-  namespace: outline
-  annotations: {}
-    #    kubernetes.io/ingress.class: nginx
-
-    # Make sure uploads work (Outline supports file uploads)
-    #    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
-
-    # Do NOT force HTTPS redirect
-    #    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-
-    # (Optional) Redirect www -> apex
-    #    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
-spec:
-  ingressClassName: nginx
-  rules:
-    - host: aidevops.online
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: outline
-                port:
-                  number: 3000
-    - host: www.aidevops.online
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: outline
-                port:
-                  number: 3000
 

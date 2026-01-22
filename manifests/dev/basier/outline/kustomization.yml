@@ -4,4 +4,4 @@ kind: Kustomization
 metadata:
   name: flux-system
 resources:
-  - deployment.yaml
+  - deployment-manual.yaml
