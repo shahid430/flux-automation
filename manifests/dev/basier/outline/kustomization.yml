@@ -4,4 +4,8 @@ kind: Kustomization
 metadata:
   name: flux-system
 resources:
-  - deployment-manual.yaml
+  - outline.yml
+  - postgresql.yml
+  - redis.yml
+  - configmap.yml
+  - secret.yml
