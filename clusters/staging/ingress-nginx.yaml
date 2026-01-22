@@ -8,8 +8,8 @@ spec:
   chart:
     spec:
       chart: ./manifests/dev/monitoring/ingress-nginx
-        #      reconcileStrategy: ChartVersion
-      version: 4.14.1
+      reconcileStrategy: ChartVersion
+        #      version: 4.14.1
       sourceRef:
         kind: GitRepository
         name: ingress-nginx
