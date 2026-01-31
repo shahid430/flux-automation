@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: petclinic
+  namespace: petclinic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: petclinic
+  template:
+    metadata:
+      labels:
+        app: petclinic
+    spec:
+      containers:
+        - name: app
+          image: springcommunity/spring-petclinic-rest:latest
+          ports:
+            - containerPort: 9966
+          env:
+            # OpenTelemetry Java agent via JAVA_TOOL_OPTIONS (no code changes)
+            - name: JAVA_TOOL_OPTIONS
+              value: "-javaagent:/otel/opentelemetry-javaagent.jar"
+            - name: OTEL_SERVICE_NAME
+              value: "petclinic"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://otel-collector.observability.svc.cluster.local:4318"
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: "http/protobuf"
+          # Pull the OTel Java agent at pod start (simple + GitOps friendly)
+          volumeMounts:
+            - name: otel-agent
+              mountPath: /otel
+          readinessProbe:
+            httpGet:
+              path: /petclinic/actuator/health
+              port: 9966
+            initialDelaySeconds: 20
+            periodSeconds: 10
+      initContainers:
+        - name: fetch-otel-agent
+          image: curlimages/curl:8.5.0
+          command: ["sh", "-c"]
+          args:
+            - >
+              set -e;
+              curl -fsSL
+              -o /otel/opentelemetry-javaagent.jar
+              https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar;
+          volumeMounts:
+            - name: otel-agent
+              mountPath: /otel
+      volumes:
+        - name: otel-agent
+          emptyDir: {}
+
