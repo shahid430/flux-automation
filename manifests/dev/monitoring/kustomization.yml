@@ -6,7 +6,7 @@ metadata:
 resources:
   - kube-prometheus-stack
   - ingress-nginx
-  - observability
+    #  - observability
   #  - ingress
 #  - kong
 #  - loki-distributed
