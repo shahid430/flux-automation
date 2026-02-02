@@ -6,4 +6,31 @@ metadata:
 spec:
   url: https://jaegertracing.github.io/helm-charts
   interval: 10m
-
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jaeger
+  namespace: observability
+spec:
+  interval: 10m
+  chart:
+    spec:
+      chart: jaeger
+      sourceRef:
+        kind: HelmRepository
+        name: jaegertracing
+        namespace: observability
+      interval: 10m
+  values:
+    provisionDataStore:
+      cassandra: false
+      elasticsearch: false
+    allInOne:
+      enabled: true
+    agent:
+      enabled: false
+    collector:
+      service:
+        grpc:
+          port: 14250
