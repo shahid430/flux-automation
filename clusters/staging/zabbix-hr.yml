@@ -28,6 +28,9 @@ spec:
       nodePort: 32006
     zabbixServer:
       enabled: true
+      extraEnv:
+        - name: ZBX_STATSALLOWEDIP
+          value: "10.244.0.0/16"
     zabbixWeb:
       enabled: true
       adminUser: Admin
