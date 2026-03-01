@@ -25,3 +25,14 @@ spec:
       enabled: true
     grafana:
       enabled: true
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: loki-stack
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  url: https://github.com/shahid430/flux-automation
