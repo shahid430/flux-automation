@@ -30,7 +30,22 @@ spec:
       enabled: true
       extraEnv:
         - name: ZBX_STATSALLOWEDIP
-          value: "10.244.0.0/16"
+          value: "10.244.2.0/16"
+      extraVolumes:
+        - name: zbx-stats-allowed
+          configMap:
+            name: zbx-stats-allowed
+      extraVolumeMounts:
+        - name: zbx-stats-allowed
+          mountPath: /etc/zabbix/zabbix_server.conf.d
+          readOnly: true
+      extraPodSpecs:
+        containers:
+          - name: zabbix-server
+            ports:
+              - containerPort: 10051
+                name: zabbix-server
+                protocol: TCP
     zabbixWeb:
       enabled: true
       adminUser: Admin
