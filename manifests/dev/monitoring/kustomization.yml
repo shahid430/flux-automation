@@ -7,7 +7,6 @@ resources:
   - kube-prometheus-stack
   - ingress-nginx
   - zabbix-exporter
-  - karpor
     #  - observability
   #  - ingress
 #  - kong
