@@ -1,0 +1,18 @@
+apiVersion: v2
+appVersion: 0.6.4
+description: A modern kubernetes visualization tool (Karpor).
+home: https://github.com/KusionStack/karpor
+icon: https://kusionstack.io/karpor/assets/logo/logo.svg
+keywords:
+- KusionStack
+- karpor
+maintainers:
+- email: kusionstack@gmail.com
+  name: kusionstack
+  url: https://kusionstack.io/karpor
+name: karpor
+sources:
+- https://github.com/KusionStack/charts/tree/master/charts/karpor
+- https://github.com/KusionStack/karpor
+type: application
+version: 0.7.6

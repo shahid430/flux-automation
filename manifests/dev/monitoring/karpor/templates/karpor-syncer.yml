@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{- include "karpor.labels" (dict "context" . "component" .Values.syncer.name) | nindent 4 }}
+  name: karpor-syncer
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.syncer.replicas }}
+  selector:
+    matchLabels:
+      {{- include "karpor.selectorLabels" (dict "context" . "component" .Values.syncer.name) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "karpor.selectorLabels" (dict "context" . "component" .Values.syncer.name) | nindent 8 }}
+    spec:
+      containers:
+        - command:
+            - /karpor
+          args:
+            - syncer
+            - --elastic-search-addresses=http://elasticsearch.{{ .Values.namespace }}.svc:{{ .Values.elasticsearch.port }}
+          env:
+            - name: KUBECONFIG
+              value: /etc/karpor/config
+          image: {{ include "karpor.realImage" (dict "context" . "repo" .Values.syncer.image.repo "tag" .Values.syncer.image.tag "needV" (not (hasPrefix "v" .Values.syncer.image.tag))) }}
+          imagePullPolicy: {{ .Values.global.image.imagePullPolicy }} 
+          name: karpor-syncer
+          ports:
+            - containerPort: {{ .Values.syncer.port }}
+          volumeMounts:
+            - mountPath: /etc/karpor/
+              name: karpor-kubeconfig
+          resources:
+            {{- toYaml .Values.syncer.resources | nindent 12 }}
+      volumes:
+        - name: karpor-kubeconfig
+          configMap:
+            name: karpor-kubeconfig

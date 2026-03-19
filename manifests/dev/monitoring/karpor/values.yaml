@@ -1,0 +1,167 @@
+# Default values for karpor.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Which namespace to be deployed.
+namespace: karpor
+# -- Whether to generate namespace.
+namespaceEnabled: true
+# -- Image registry proxy will be the prefix as all component image.
+registryProxy: ""
+
+# Global configuration for Karpor components
+global:
+  image:
+    # -- Image pull policy to be applied to all Karpor components.
+    imagePullPolicy: IfNotPresent
+
+# Configuration for Karpor server
+server:
+  # -- Component name for karpor server.
+  name: karpor-server
+  # -- The number of karpor server pods to run.
+  replicas: 1
+  # -- Port for karpor server.
+  port: 7443
+  image:
+    # -- Repository for Karpor server image.
+    repo: kusionstack/karpor
+    # -- Tag for Karpor server image. Defaults to the chart's appVersion if not specified.
+    tag: ""
+  # -- Resource limits and requests for the karpor server pods.
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+      ephemeral-storage: 2Gi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+      ephemeral-storage: 10Gi
+  # -- Enable RBAC authorization if set to true.
+  enableRbac: false
+  # -- Service type for the karpor server. The available type values list as ["ClusterIP"、"NodePort"、"LoadBalancer"].
+  serviceType: ClusterIP
+  # -- AI configuration section. The AI analysis feature requires that [authToken, baseUrl] be assigned values.
+  ai:
+    # -- Authentication token for accessing the AI service.
+    authToken: ""
+    # -- Base URL of the AI service. e.g., "https://api.openai.com/v1".
+    baseUrl: ""
+    # -- Backend service or platform that the AI model is hosted on. Available options:
+    # <br/>- `"openai"`: OpenAI API (default)<br/>- `"azureopenai"`: Azure OpenAI Service
+    # <br/>- `"huggingface"`: Hugging Face API<br/>- `"deepseek"`: DeepSeek API<br/>
+    # If the backend you are using is compatible with OpenAI, then there is no need to make any changes here.
+    backend: "openai"
+    # -- Name or identifier of the AI model to be used. e.g., "gpt-3.5-turbo".
+    model: "gpt-3.5-turbo"
+    # -- Temperature parameter for the AI model. This controls the randomness of the output, where a higher
+    # value (e.g., 1.0) makes the output more random, and a lower value (e.g., 0.0) makes it more deterministic.
+    temperature: 1.0
+    # -- Top-p (nucleus sampling) parameter for the AI model. This controls Controls the probability mass to consider for
+    # sampling, where a higher value leads to greater diversity in the generated content (typically ranging from 0 to 1)
+    topP: 1.0
+    # -- Proxy configuration for AI service connections
+    proxy:
+      # -- Enable proxy settings for AI service connections. When false, proxy settings will be ignored.
+      enabled: false
+      # -- HTTP proxy URL for AI service connections (e.g., "http://proxy.example.com:8080")
+      httpProxy: ""
+      # -- HTTPS proxy URL for AI service connections (e.g., "https://proxy.example.com:8080")
+      httpsProxy: ""
+      # -- No proxy configuration for AI service connections (e.g., "localhost,127.0.0.1,example.com")
+      noProxy: ""
+
+# Configuration for Karpor syncer
+syncer:
+  # -- Component name for Karpor syncer.
+  name: karpor-syncer
+  # -- The number of karpor syncer pods to run.
+  replicas: 1
+  # -- Port for Karpor syncer.
+  port: 7443
+  image:
+    # -- Repository for Karpor syncer image.
+    repo: kusionstack/karpor
+    # -- Tag for Karpor syncer image. Defaults to the chart's appVersion if not specified.
+    tag: ""
+  # -- Resource limits and requests for the karpor syncer pods.
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+      ephemeral-storage: 2Gi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+      ephemeral-storage: 10Gi
+
+# Configuration for ElasticSearch
+elasticsearch:
+  # -- Component name for ElasticSearch.
+  name: elasticsearch
+  # -- The number of ElasticSearch pods to run.
+  replicas: 1
+  # -- Port for ElasticSearch.
+  port: 9200
+  image:
+    # -- Repository for ElasticSearch image.
+    repo: docker.elastic.co/elasticsearch/elasticsearch
+    # -- Specific tag for ElasticSearch image.
+    tag: "8.6.2"
+  # -- Resource limits and requests for the karpor elasticsearch pods.
+  resources:
+    requests:
+      cpu: "2"
+      memory: 4Gi
+      ephemeral-storage: 10Gi
+    limits:
+      cpu: "2"
+      memory: 4Gi
+      ephemeral-storage: 10Gi
+
+# Configuration for ETCD
+etcd:
+  # -- Component name for ETCD.
+  name: etcd
+  # -- The number of etcd pods to run.
+  replicas: 1
+  # -- Port for ETCD.
+  port: 2379
+  image:
+    # -- Repository for ETCD image.
+    repo: quay.io/coreos/etcd
+    # -- Specific tag for ETCD image.
+    tag: "v3.5.11"
+  # -- Resource limits and requests for the karpor etcd pods.
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+      ephemeral-storage: 2Gi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+      ephemeral-storage: 10Gi
+  persistence:
+    # enabled: true
+    # -- Size of etcd persistent volume
+    size: 10Gi
+    # -- Volume access mode, ReadWriteOnce means single node read-write access
+    accessModes:
+      - ReadWriteOnce
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+
+# Configuration for Jobs
+job:
+  image:
+    # -- Repository for the Job image.
+    repo: kusionstack/karpor
+    # -- Tag for Karpor image. Defaults to the chart's appVersion if not specified.
+    tag: ""

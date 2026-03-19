@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: etcd
+  namespace: {{ .Values.namespace }}
+spec:
+  ports:
+    - port: {{ .Values.etcd.port }}
+  selector:
+    {{- include "karpor.selectorLabels" (dict "context" . "component" .Values.etcd.name) | nindent 4 }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: etcd
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "karpor.labels" (dict "context" . "component" .Values.etcd.name) | nindent 4 }}
+spec:
+  serviceName: etcd
+  replicas: {{ .Values.etcd.replicas }}
+  selector:
+    matchLabels:
+      {{- include "karpor.selectorLabels" (dict "context" . "component" .Values.etcd.name) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "karpor.selectorLabels" (dict "context" . "component" .Values.etcd.name) | nindent 8 }}
+    spec:
+      containers:
+        - name: etcd
+          image: {{ include "karpor.realImage" (dict "context" . "repo" .Values.etcd.image.repo "tag" .Values.etcd.image.tag) }}
+          imagePullPolicy: {{ .Values.global.image.imagePullPolicy }} 
+          command:
+            - /usr/local/bin/etcd
+            - --listen-client-urls=http://0.0.0.0:{{ .Values.etcd.port }}
+            - --advertise-client-urls=http://localhost:{{ .Values.etcd.port }}
+          env:
+            - name: ETCD_DATA_DIR
+              value: /etcd-data/default.etcd
+          ports:
+            - containerPort: {{ .Values.etcd.port }} 
+          volumeMounts:
+            - name: data
+              mountPath: /etcd-data
+          resources:
+            {{- toYaml .Values.etcd.resources | nindent 12 }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+        {{- range .Values.etcd.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.etcd.persistence.size | quote }}
+        {{- if .Values.etcd.persistence.storageClass }}
+        {{- if (eq "-" .Values.etcd.persistence.storageClass) }}
+        storageClassName: ""
+        {{- else }}
+        storageClassName: "{{ .Values.etcd.persistence.storageClass }}"
+        {{- end }}
+        {{- end }}
