@@ -4,6 +4,6 @@ helmCharts:
   - name: karpor
     # If the chart is local, use 'path' (relative to kustomization.yaml)
     # If remote, use 'repo', 'name', and 'version'
-    path: ./karpor 
+    path: ./manifests/dev/infra/karpor 
     releaseName: karpor-release
     valuesFile: ./karpor/values.yaml
