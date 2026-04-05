@@ -18,6 +18,7 @@ spec:
   targetNamespace: minio
   suspend: false
   chart:
+    pause: true
     spec:
       chart: minio
       version: "5.4.0" # Use the latest stable version if needed
