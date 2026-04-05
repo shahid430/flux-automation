@@ -4,6 +4,6 @@ kind: Kustomization
 metadata:
   name: flux-system
 resources:
-  - mongodb
+#  - mongodb
 #  - karpor
     #  - kube-prometheus-stack
