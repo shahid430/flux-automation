@@ -27,7 +27,7 @@ metadata:
   name: harbor
   namespace: flux-system
 spec:
-  pause: true
+  suspend: true
   interval: 10m
   targetNamespace: harbor
   chart:
