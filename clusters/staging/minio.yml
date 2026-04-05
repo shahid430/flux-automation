@@ -16,9 +16,8 @@ metadata:
 spec:
   interval: 10m
   targetNamespace: minio
-  suspend: false
+  suspend: true
   chart:
-    pause: true
     spec:
       chart: minio
       version: "5.4.0" # Use the latest stable version if needed
