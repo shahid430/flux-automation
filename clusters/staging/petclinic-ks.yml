@@ -17,6 +17,7 @@ metadata:
   name: basier
   namespace: flux-system
 spec:
+  pause: true
   interval: 10m
   path: ./manifests/dev/basier/observability
   prune: true

@@ -5,6 +5,7 @@ metadata:
   name: zabbix
   namespace: flux-system
 spec:
+  pause: true
   chart:
     spec:
       chart: zabbix

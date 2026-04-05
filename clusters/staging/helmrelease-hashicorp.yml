@@ -5,6 +5,7 @@ metadata:
   name: hashicorp-vault
   namespace: flux-system
 spec:
+  pause: true
   chart:
     spec:
       chart: vault

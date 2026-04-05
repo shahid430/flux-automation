@@ -16,6 +16,7 @@ metadata:
   name: infra
   namespace: flux-system
 spec:
+  pause: true
   #  commonMetadata:
     #    labels:
       #      environment: dev

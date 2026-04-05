@@ -18,6 +18,7 @@ metadata:
   name: airflow
   namespace: flux-system
 spec:
+  pause: true
   interval: 10m
   targetNamespace: airflow
   chart:
