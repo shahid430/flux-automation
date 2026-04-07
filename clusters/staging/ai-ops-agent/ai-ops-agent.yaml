@@ -333,8 +333,8 @@ metadata:
   namespace: ai-ops
 type: Opaque
 stringData:
-  WEBUI_SECRET_KEY: "" 
-  HF_TOKEN: ""      
+  #  WEBUI_SECRET_KEY: "" 
+  #  HF_TOKEN: ""      
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -370,16 +370,16 @@ spec:
               value: "1"
             - name: ENABLE_PERSISTENT_CONFIG
               value: "False"
-            - name: WEBUI_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: open-webui-secret
-                  key: WEBUI_SECRET_KEY
-            - name: HF_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: open-webui-secret
-                  key: HF_TOKEN
+                #            - name: WEBUI_SECRET_KEY
+                #              valueFrom:
+                #                secretKeyRef:
+                #                  name: open-webui-secret
+                #                  key: WEBUI_SECRET_KEY
+                #            - name: HF_TOKEN
+                #              valueFrom:
+                #                secretKeyRef:
+                #                  name: open-webui-secret
+                #                  key: HF_TOKEN
           ports:
             - name: http
               containerPort: 8080
