@@ -333,8 +333,8 @@ metadata:
   namespace: ai-ops
 type: Opaque
 stringData:
-  WEBUI_SECRET_KEY: "XXXXXXXXXXXXXXXXXXX"        #"1f1ba0c144fdc0635e99d370f4cccf9b38d8d7c069ffcf45c034785fe5101eef"
-  HF_TOKEN: "XXXXXXXXXXXXXXXXXXXXX"                                #"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"
+  WEBUI_SECRET_KEY: "XXXXXXXXXXXXXXXXXXX" 
+  HF_TOKEN: "XXXXXXXXXXXXXXXXXXXXX"      
 ---
 apiVersion: apps/v1
 kind: Deployment
