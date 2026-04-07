@@ -333,8 +333,8 @@ metadata:
   namespace: ai-ops
 type: Opaque
 stringData:
-  WEBUI_SECRET_KEY: "XXXXXXXXXXXXXXXXXXX" 
-  HF_TOKEN: "XXXXXXXXXXXXXXXXXXXXX"      
+  WEBUI_SECRET_KEY: "" 
+  HF_TOKEN: ""      
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -358,7 +358,6 @@ spec:
           image: ghcr.io/open-webui/open-webui:main
           imagePullPolicy: IfNotPresent
           env:
-          ####################
             - name: OLLAMA_BASE_URL
               value: "http://ollama.ai-ops.svc.cluster.local:11434"
             - name: USER_AGENT
@@ -371,7 +370,6 @@ spec:
               value: "1"
             - name: ENABLE_PERSISTENT_CONFIG
               value: "False"
-          ########################
             - name: WEBUI_SECRET_KEY
               valueFrom:
                 secretKeyRef:
