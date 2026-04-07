@@ -326,6 +326,16 @@ spec:
       port: 8080
       targetPort: http
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: open-webui-secret
+  namespace: ai-ops
+type: Opaque
+stringData:
+  WEBUI_SECRET_KEY: "1f1ba0c144fdc0635e99d370f4cccf9b38d8d7c069ffcf45c034785fe5101eef"
+  HF_TOKEN: "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"
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
