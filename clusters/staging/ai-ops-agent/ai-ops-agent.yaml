@@ -360,6 +360,16 @@ spec:
               value: "1"
             - name: ENABLE_PERSISTENT_CONFIG
               value: "False"
+            - name: WEBUI_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: open-webui-secret
+                  key: WEBUI_SECRET_KEY
+            - name: HUGGING_FACE_HUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: huggingface-token
+                  key: token
           ports:
             - name: http
               containerPort: 8080
