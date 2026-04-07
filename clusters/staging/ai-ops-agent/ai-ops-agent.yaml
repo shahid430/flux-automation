@@ -1,0 +1,493 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ai-ops
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ollama-models-pvc
+  namespace: ai-ops
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ollama-model-loader
+  namespace: ai-ops
+  labels:
+    app: ollama-model-loader
+spec:
+  restartPolicy: Never
+  containers:
+    - name: loader
+      image: alpine:3.20
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh", "-c", "sleep 86400"]
+      volumeMounts:
+        - name: ollama-models
+          mountPath: /models
+  volumes:
+    - name: ollama-models
+      persistentVolumeClaim:
+        claimName: ollama-models-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama
+  namespace: ai-ops
+  labels:
+    app: ollama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama
+  template:
+    metadata:
+      labels:
+        app: ollama
+    spec:
+      containers:
+        - name: ollama
+          image: ollama/ollama:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: OLLAMA_HOST
+              value: "0.0.0.0:11434"
+            - name: OLLAMA_MODELS
+              value: "/models"
+          ports:
+            - name: http
+              containerPort: 11434
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "1.5"
+              memory: 3Gi
+            limits:
+              cpu: "3"
+              memory: 6Gi
+          volumeMounts:
+            - name: ollama-models
+              mountPath: /models
+      volumes:
+        - name: ollama-models
+          persistentVolumeClaim:
+            claimName: ollama-models-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama
+  namespace: ai-ops
+spec:
+  selector:
+    app: ollama
+  ports:
+    - name: http
+      port: 11434
+      targetPort: http
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubernetes-mcp-server
+  namespace: ai-ops
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubernetes-mcp-server-readonly
+rules:
+  - apiGroups: [""]
+    resources:
+      - namespaces
+      - nodes
+      - pods
+      - pods/log
+      - services
+      - endpoints
+      - events
+      - persistentvolumeclaims
+      - persistentvolumes
+      - configmaps
+      - resourcequotas
+      - limitranges
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["apps"]
+    resources:
+      - deployments
+      - daemonsets
+      - statefulsets
+      - replicasets
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["batch"]
+    resources:
+      - jobs
+      - cronjobs
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["autoscaling"]
+    resources:
+      - horizontalpodautoscalers
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["networking.k8s.io"]
+    resources:
+      - ingresses
+      - ingressclasses
+      - networkpolicies
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources:
+      - gateways
+      - gatewayclasses
+      - httproutes
+      - grpcroutes
+      - tcproutes
+      - tlsroutes
+      - udproutes
+      - referencegrants
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["storage.k8s.io"]
+    resources:
+      - storageclasses
+      - csinodes
+      - volumeattachments
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["policy"]
+    resources:
+      - poddisruptionbudgets
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["metrics.k8s.io"]
+    resources:
+      - pods
+      - nodes
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["coordination.k8s.io"]
+    resources:
+      - leases
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["discovery.k8s.io"]
+    resources:
+      - endpointslices
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubernetes-mcp-server-readonly
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubernetes-mcp-server-readonly
+subjects:
+  - kind: ServiceAccount
+    name: kubernetes-mcp-server
+    namespace: ai-ops
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubernetes-mcp-server-config
+  namespace: ai-ops
+data:
+  config.toml: |
+    log_level = 2
+    port = "8080"
+    list_output = "table"
+    read_only = true
+    disable_destructive = true
+    validation_enabled = true
+    toolsets = ["core", "config"]
+
+    [[denied_resources]]
+    group = ""
+    version = "v1"
+    kind = "Secret"
+
+    [[denied_resources]]
+    group = "rbac.authorization.k8s.io"
+    version = "v1"
+    kind = "ClusterRole"
+
+    [[denied_resources]]
+    group = "rbac.authorization.k8s.io"
+    version = "v1"
+    kind = "ClusterRoleBinding"
+
+    [[denied_resources]]
+    group = "rbac.authorization.k8s.io"
+    version = "v1"
+    kind = "Role"
+
+    [[denied_resources]]
+    group = "rbac.authorization.k8s.io"
+    version = "v1"
+    kind = "RoleBinding"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-mcp-server
+  namespace: ai-ops
+  labels:
+    app: kubernetes-mcp-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubernetes-mcp-server
+  template:
+    metadata:
+      labels:
+        app: kubernetes-mcp-server
+    spec:
+      serviceAccountName: kubernetes-mcp-server
+      automountServiceAccountToken: true
+      containers:
+        - name: kubernetes-mcp-server
+          image: quay.io/containers/kubernetes_mcp_server:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - --config
+            - /etc/kubernetes-mcp/config.toml
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: config
+              mountPath: /etc/kubernetes-mcp/config.toml
+              subPath: config.toml
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: kubernetes-mcp-server-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-mcp-server
+  namespace: ai-ops
+spec:
+  selector:
+    app: kubernetes-mcp-server
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: open-webui-secret
+  namespace: ai-ops
+type: Opaque
+stringData:
+  WEBUI_SECRET_KEY: "XXXXXXXXXXXXXXXXXXX"        #"1f1ba0c144fdc0635e99d370f4cccf9b38d8d7c069ffcf45c034785fe5101eef"
+  HF_TOKEN: "XXXXXXXXXXXXXXXXXXXXX"                                #"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"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-webui
+  namespace: ai-ops
+  labels:
+    app: open-webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open-webui
+  template:
+    metadata:
+      labels:
+        app: open-webui
+    spec:
+      containers:
+        - name: open-webui
+          image: ghcr.io/open-webui/open-webui:main
+          imagePullPolicy: IfNotPresent
+          env:
+          ####################
+            - name: OLLAMA_BASE_URL
+              value: "http://ollama.ai-ops.svc.cluster.local:11434"
+            - name: USER_AGENT
+              value: "open-webui-mcp"
+            - name: CORS_ALLOW_ORIGIN
+              value: "*"
+            - name: OFFLINE_MODE
+              value: "true"
+            - name: HF_HUB_OFFLINE
+              value: "1"
+            - name: ENABLE_PERSISTENT_CONFIG
+              value: "False"
+          ########################
+            - name: WEBUI_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: open-webui-secret
+                  key: WEBUI_SECRET_KEY
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: open-webui-secret
+                  key: HF_TOKEN
+          ports:
+            - name: http
+              containerPort: 8080
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open-webui
+  namespace: ai-ops
+spec:
+  type: NodePort
+  selector:
+    app: open-webui
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      nodePort: 30080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcpo
+  namespace: ai-ops
+  labels:
+    app: mcpo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcpo
+  template:
+    metadata:
+      labels:
+        app: mcpo
+    spec:
+      containers:
+        - name: mcpo
+          image: ghcr.io/open-webui/mcpo:main
+          imagePullPolicy: IfNotPresent
+          args:
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8000"
+            - --server-type
+            - streamable-http
+            - --
+            - http://kubernetes-mcp-server.ai-ops.svc.cluster.local:8080/mcp
+          ports:
+            - name: http
+              containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /docs
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /docs
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcpo
+  namespace: ai-ops
+spec:
+  selector:
+    app: mcpo
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http

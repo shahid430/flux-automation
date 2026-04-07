@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ollama-model-import
+  namespace: ai-ops
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: import
+          image: alpine:3.20
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -e
+              mkdir -p /models
+              tar -xzf /input/ollama-models.tar.gz -C /models --strip-components=1
+          volumeMounts:
+            - name: ollama-models
+              mountPath: /models
+            - name: model-archive
+              mountPath: /input
+      volumes:
+        - name: ollama-models
+          persistentVolumeClaim:
+            claimName: ollama-models-pvc
+        - name: model-archive
+          hostPath:
+            path: /data/ollama-import
+            type: Directory
