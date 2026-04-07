@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcpo
+  namespace: ai-ops
+  labels:
+    app: mcpo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcpo
+  template:
+    metadata:
+      labels:
+        app: mcpo
+    spec:
+      containers:
+        - name: mcpo
+          image: ghcr.io/open-webui/mcpo:main
+          imagePullPolicy: IfNotPresent
+          args:
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8000"
+            - --server-type
+            - streamable-http
+            - --
+            - http://kubernetes-mcp-server.ai-ops.svc.cluster.local:8080/mcp
+          ports:
+            - name: http
+              containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /docs
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /docs
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcpo
+  namespace: ai-ops
+spec:
+  selector:
+    app: mcpo
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
