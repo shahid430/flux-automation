@@ -832,7 +832,7 @@ ports:
     expose:
       default: false
     # -- The exposed port for this service
-    exposedPort: 8080
+    exposedPort: 80
     # -- The port protocol (TCP/UDP)
     protocol: TCP
     observability:  # @schema additionalProperties: false
