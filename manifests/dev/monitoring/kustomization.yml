@@ -4,7 +4,7 @@ kind: Kustomization
 metadata:
   name: flux-system
 resources:
-  - kube-prometheus-stack
-  - traefik
+  #  - kube-prometheus-stack
+  #  - traefik
 #  - ingress-nginx
 #  - zabbix-exporter
