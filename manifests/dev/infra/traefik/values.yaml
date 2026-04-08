@@ -117,7 +117,7 @@ podDisruptionBudget:  # @schema additionalProperties: false
 ingressClass:  # @schema additionalProperties: false
   # -- Create a default IngressClass for Traefik
   enabled: true
-  isDefaultClass: true
+  isDefaultClass: false
   name: ""
 
 core:  # @schema additionalProperties: false
@@ -148,7 +148,7 @@ experimental:
 
 gateway:
   # -- When providers.kubernetesGateway.enabled, deploy a default gateway
-  enabled: true
+  enabled: false
   # -- Set a custom name to gateway
   name: ""
   # -- By default, Gateway is created in the same `Namespace` as Traefik.
@@ -294,13 +294,13 @@ providers:
     # -- Load Kubernetes IngressRoute provider
     enabled: true
     # -- Allows IngressRoute to reference resources in namespace other than theirs
-    allowCrossNamespace: false
+    allowCrossNamespace: true
     # -- Allows to reference ExternalName services in IngressRoute
-    allowExternalNameServices: false
+    allowExternalNameServices: true
     # -- Allows to return 503 when there are no endpoints available
     allowEmptyServices: true
     # -- When the parameter is set, only resources containing an annotation with the same value are processed. Otherwise, resources missing the annotation, having an empty value, or the value traefik are processed. It will also set required annotation on Dashboard and Healthcheck IngressRoute when enabled.
-    ingressClass: ""
+    ingressClass: "traefik" # @schema type:[string, null]
     # -- See [upstream documentation](https://doc.traefik.io/traefik/reference/install-configuration/providers/kubernetes/kubernetes-ingress/#opt-providers-kubernetesIngress-labelselector)
     labelSelector: ""
     # -- Array of namespaces to watch. If left empty, Traefik watches all namespaces. . When using `rbac.namespaced`, it will watch helm release namespace and namespaces listed in this array.
@@ -319,7 +319,8 @@ providers:
     # -- Only for Traefik v3.0, Deprecated since v3.1. See [upstream documentation](https://doc.traefik.io/traefik/v3.0/providers/kubernetes-ingress/#disableingressclasslookup)
     disableIngressClassLookup: false
     # -- When ingressClass is set, only Ingresses containing an annotation with the same value are processed. Otherwise, Ingresses missing the annotation, having an empty value, or the value traefik are processed.
-    ingressClass:  # @schema type:[string, null]
+    #########UPDATED VALUE#########
+    ingressClass: traefik # @schema type:[string, null]
     labelSelector:  # @schema type:[string, null]
     # -- Array of namespaces to watch. If left empty, Traefik watches all namespaces. . When using `rbac.namespaced`, it will watch helm release namespace and namespaces listed in this array.
     namespaces: []
@@ -797,7 +798,9 @@ global:
 # -- Additional arguments to be passed at Traefik's binary
 # See [CLI Reference](https://docs.traefik.io/reference/static-configuration/cli/)
 # Use curly braces to pass values: `helm install --set="additionalArguments={--providers.kubernetesingress.ingressclass=traefik-internal,--log.level=DEBUG}"`
-additionalArguments: []
+additionalArguments:
+  - --api.dashboard=true
+  - --ping=true
 #  - "--providers.kubernetesingress.ingressclass=traefik-internal"
 #  - "--log.level=DEBUG"
 
