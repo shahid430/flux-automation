@@ -4,6 +4,8 @@ kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
   namespace: flux-system
+  labels:
+    istio-injection: enabled
 spec:
   chart:
     spec:
@@ -70,10 +72,3 @@ spec:
   ref:
     branch: main
   url: https://github.com/shahid430/flux-automation
----
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: monitoring
-  labels:
-    istio-injection: enabled
