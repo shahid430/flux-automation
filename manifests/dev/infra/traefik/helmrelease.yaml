@@ -1,4 +1,4 @@
-manifests/dev/infra/traefik/helmrelease.yamlapiVersion: helm.toolkit.fluxcd.io/v2
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: traefik
