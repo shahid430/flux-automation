@@ -70,3 +70,10 @@ spec:
   ref:
     branch: main
   url: https://github.com/shahid430/flux-automation
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: monitoring
+  labels:
+    istio-injection: enabled
