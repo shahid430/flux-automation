@@ -15,7 +15,7 @@ spec:
   install:
     createNamespace: true
   targetNamespace: traefik
-  # values:
+  values:
   #   providers:
   #     kubernetesIngress:
   #       enabled: true
@@ -28,9 +28,11 @@ spec:
   #     kubernetesGateway:
   #       enabled: false
 
-  #   ingressClass:
-  #     enabled: true
-  #     isDefaultClass: false
+    ingressClass:
+      enabled: true
+      isDefaultClass: false
+      name: traefik
+      
 
   #   gateway:
   #     enabled: false
