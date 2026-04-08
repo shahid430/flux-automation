@@ -118,7 +118,7 @@ ingressClass:  # @schema additionalProperties: false
   # -- Create a default IngressClass for Traefik
   enabled: true
   isDefaultClass: false
-  name: ""
+  name: "traefik-traefik"
 
 core:  # @schema additionalProperties: false
   # -- Can be used to use globally v2 router syntax. Deprecated since v3.4 /!\.
@@ -301,7 +301,7 @@ providers:
     # -- Allows to return 503 when there are no endpoints available
     allowEmptyServices: true
     # -- When the parameter is set, only resources containing an annotation with the same value are processed. Otherwise, resources missing the annotation, having an empty value, or the value traefik are processed. It will also set required annotation on Dashboard and Healthcheck IngressRoute when enabled.
-    ingressClass: "traefik" # @schema type:[string, null]
+    ingressClass: "traefik-traefik" # @schema type:[string, null]
     # -- See [upstream documentation](https://doc.traefik.io/traefik/reference/install-configuration/providers/kubernetes/kubernetes-ingress/#opt-providers-kubernetesIngress-labelselector)
     labelSelector: ""
     # -- Array of namespaces to watch. If left empty, Traefik watches all namespaces. . When using `rbac.namespaced`, it will watch helm release namespace and namespaces listed in this array.
@@ -321,7 +321,7 @@ providers:
     disableIngressClassLookup: false
     # -- When ingressClass is set, only Ingresses containing an annotation with the same value are processed. Otherwise, Ingresses missing the annotation, having an empty value, or the value traefik are processed.
     #########UPDATED VALUE#########
-    ingressClass: traefik # @schema type:[string, null]
+    ingressClass: traefik-traefik # @schema type:[string, null]
     labelSelector:  # @schema type:[string, null]
     # -- Array of namespaces to watch. If left empty, Traefik watches all namespaces. . When using `rbac.namespaced`, it will watch helm release namespace and namespaces listed in this array.
     namespaces: []
