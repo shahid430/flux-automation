@@ -45,7 +45,7 @@ metadata:
   name: whoami
   namespace: demo
 spec:
-  ingressClassName: traefik
+  ingressClassName: traefik-traefik
   rules:
     - host: whoami.local
       http:
