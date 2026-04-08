@@ -1,0 +1,61 @@
+manifests/dev/infra/traefik/helmrelease.yamlapiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: traefik
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+        namespace: flux-system
+  install:
+    createNamespace: true
+  targetNamespace: traefik
+  values:
+    providers:
+      kubernetesIngress:
+        enabled: true
+        ingressClass: traefik
+        publishedService:
+          enabled: true
+      kubernetesCRD:
+        enabled: true
+        ingressClass: traefik
+      kubernetesGateway:
+        enabled: false
+
+    ingressClass:
+      enabled: true
+      isDefaultClass: false
+
+    gateway:
+      enabled: false
+
+    service:
+      type: LoadBalancer
+
+    ports:
+      web:
+        exposedPort: 80
+        redirectTo:
+          port: websecure
+      websecure:
+        exposedPort: 443
+        tls:
+          enabled: true
+
+    logs:
+      general:
+        level: INFO
+
+    metrics:
+      prometheus:
+        enabled: true
+
+    additionalArguments:
+      - --api.dashboard=true
+      - --ping=true
