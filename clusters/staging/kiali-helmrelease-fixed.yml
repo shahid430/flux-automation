@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  - name: kiali-operator
+  name: kiali-operator
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
@@ -19,7 +19,6 @@ metadata:
   namespace: kiali-operator
 spec:
   interval: 5m
-  createNamespace: true
   chart:
     spec:
       chart: kiali-operator
@@ -28,6 +27,9 @@ spec:
         kind: HelmRepository
         name: kiali
         namespace: flux-system
+  install:
+    createNamespace: true
+  targetNamespace: kiali-operator
   values:
     cr:
       create: true
