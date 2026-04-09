@@ -36,18 +36,22 @@ spec:
                 requests:
                   storage: 10Gi
     grafana:
-      ingress:
-        enabled: true
-        path: /
-        pathType: Prefix
-        hosts:
-          - grafana.localhost
       adminUser: admin
       adminPassword: admin123
       plugins:
         - alexanderzobnin-zabbix-app
       datasources.yaml:
         apiVersion: 1
+      ingress:
+        enabled: true
+        hosts:
+          - grafana-dev.local
+        path: /
+        # Uncomment and set if you use a specific ingress class
+        # ingressClassName: nginx
+        annotations: {}
+        labels: {}
+        tls: []
     datasources:
       enabled: true
       defaultDatasourceEnabled: false
