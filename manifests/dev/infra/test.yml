@@ -39,15 +39,36 @@ spec:
       targetPort: http
   type: ClusterIP
 ---
+
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: whoami
+#   namespace: demo
+# spec:
+#   ingressClassName: nginx # Change to 'traefik-traefik' if using Traefik, or 'nginx' for NGINX
+#   rules:
+#     - host: whoami.local
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: whoami
+#                 port:
+#                   number: 80
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: whoami
-  namespace: demo
+  name: whoami-ingress
+  namespace: monitoring
+  annotations:
+    kubernetes.io/ingress.class: nginx
 spec:
-  ingressClassName: traefik-traefik
   rules:
-    - host: whoami.local
+    - host: whoami-dev.local
       http:
         paths:
           - path: /

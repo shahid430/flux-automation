@@ -5,6 +5,7 @@ metadata:
   namespace: monitoring
   annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
     - host: grafana-dev.local
@@ -17,3 +18,7 @@ spec:
                 name: monitoring-kube-prometheus-stack-grafana
                 port:
                   number: 80
+  tls:
+    - hosts:
+        - grafana-dev.local
+      secretName: grafana-dev-tls # <-- Ensure this secret exists in the monitoring namespace
