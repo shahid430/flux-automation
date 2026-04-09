@@ -1,0 +1,26 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: grafana-dev-selfsigned
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: grafana-dev-cert
+  namespace: monitoring
+spec:
+  secretName: grafana-dev-tls
+  duration: 8760h # 1 year
+  renewBefore: 360h # 15 days
+  subject:
+    organizations:
+      - DevOps
+  commonName: grafana-dev.local
+  dnsNames:
+    - grafana-dev.local
+  issuerRef:
+    name: grafana-dev-selfsigned
+    kind: ClusterIssuer
+    group: cert-manager.io
