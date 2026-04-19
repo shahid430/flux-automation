@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: traefik-traefik
   rules:
-    - host: grafana-dev-traefik.local
+    - host: grafana-dev.local
       http:
         paths:
           - path: /
@@ -22,5 +22,5 @@ spec:
                   number: 80
   tls:
     - hosts:
-        - grafana-dev-traefik.local
-      secretName: grafana-dev-traefik-tls
+        - grafana-dev.local
+      secretName: grafana-dev-tls

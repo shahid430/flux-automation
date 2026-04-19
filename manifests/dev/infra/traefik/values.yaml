@@ -9,7 +9,7 @@ image:  # @schema additionalProperties: false
   repository: traefik
   # -- defaults to appVersion. It's used for version checking, even prefixed with experimental- or latest-.
   # When a digest is required, `versionOverride` can be used to set the version.
-  tag:  # @schema type:[string, null]
+  tag: # @schema type:[string, null]
   # -- Traefik image pull policy
   pullPolicy: IfNotPresent
 
@@ -230,7 +230,8 @@ ingressRoute:
     # /!\ Do not expose your dashboard without any protection over the internet /!\
     entryPoints: ["web"]
     # -- Additional ingressRoute middlewares (e.g. for authentication)
-    middlewares: []
+    middlewares: 
+      - name: traefik-dashboard-auth
     # -- TLS options (e.g. secret containing certificate)
     tls: {}
   healthcheck:
@@ -802,6 +803,7 @@ global:
 additionalArguments:
   - --api.dashboard=true
   - --ping=true
+  - --api.insecure=true
 #  - "--providers.kubernetesingress.ingressclass=traefik-internal"
 #  - "--log.level=DEBUG"
 
@@ -1185,7 +1187,23 @@ podSecurityContext:
 #
 # In some cases, it can avoid the need for additional, extended or adhoc deployments.
 # See #595 for more details and traefik/tests/values/extra.yaml for example.
-extraObjects: []
+extraObjects:
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      name: traefik-dashboard-auth-secret
+    type: kubernetes.io/basic-auth
+    stringData:
+      username: admin
+      password: traefik430
+
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: traefik-dashboard-auth
+    spec:
+      basicAuth:
+        secret: traefik-dashboard-auth-secret
 
 # -- This field overrides the default Release Namespace for Helm.
 # It will not affect optional CRDs such as `ServiceMonitor` and `PrometheusRules`
