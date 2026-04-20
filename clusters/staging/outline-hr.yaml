@@ -16,7 +16,6 @@ metadata:
   name: basier
   namespace: flux-system
 spec:
-  pause: false
   #  commonMetadata:
     #    labels:
       #      environment: dev
