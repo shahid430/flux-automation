@@ -6,6 +6,6 @@ metadata:
 resources:
 #  - demo1
 #  - demo2
- - outline
+#  - outline
 #  - petclinic
 #  - observability
