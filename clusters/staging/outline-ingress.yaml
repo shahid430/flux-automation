@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: outline.deem.local
+    - host: outline-dev.local
       http:
         paths:
           - path: /
@@ -22,5 +22,5 @@ spec:
                   number: 3000
   tls:
     - hosts:
-        - outline.deem.local
+        - outline-dev.local
       secretName: outline-dev-tls
