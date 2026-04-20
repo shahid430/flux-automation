@@ -18,6 +18,7 @@ metadata:
   name: kiali-operator
   namespace: kiali-operator
 spec:
+  pause: true
   interval: 5m
   chart:
     spec:
