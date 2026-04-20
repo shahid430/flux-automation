@@ -1,12 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: outline-ingress
+  name: outline-dev
   namespace: outline
   annotations:
     kubernetes.io/ingress.class: traefik
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    cert-manager.io/cluster-issuer: grafana-dev-selfsigned
+    cert-manager.io/cluster-issuer: outline-dev-selfsigned
 spec:
   ingressClassName: traefik
   rules:
@@ -17,10 +17,10 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: monitoring-kube-prometheus-stack-grafana
+                name: outline
                 port:
-                  number: 80
+                  number: 3000
   tls:
     - hosts:
-        - grafana-dev.local
-      secretName: grafana-dev-tls
+        - outline.deem.local
+      secretName: outline-dev-tls
