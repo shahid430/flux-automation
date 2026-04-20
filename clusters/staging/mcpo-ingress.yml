@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mcpo-dashboard
+  namespace: ai-ops
+  annotations:
+    kubernetes.io/ingress.class: traefik-traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: grafana-dev-selfsigned
+spec:
+  ingressClassName: traefik-traefik
+  rules:
+    - host: mcpo-dashboard.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mcpo
+                port:
+                  number: 8000
+  tls:
+    - hosts:
+        - mcpo-dashboard.localhost
+      secretName: mcpo-dashboard-tls
