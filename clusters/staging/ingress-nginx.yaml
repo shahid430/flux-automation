@@ -5,7 +5,7 @@ metadata:
   name: ingress-nginx
   namespace: flux-system
 spec:
-  suspend: true
+  suspend: false
   chart:
     spec:
       chart: ./manifests/dev/monitoring/ingress-nginx
