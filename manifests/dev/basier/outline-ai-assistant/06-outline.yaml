@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: outline
+  namespace: outline-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: outline
+  template:
+    metadata:
+      labels:
+        app: outline
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: postgres:16  #swr.jez-rakeeza-3.deem.sa/mcp/postgres:16
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until pg_isready -h postgres -U "$POSTGRES_USER" -d "$POSTGRES_DB"; do sleep 3; done
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: outline-secrets
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: outline-secrets
+                  key: POSTGRES_USER
+        - name: wait-for-redis
+          image: redis:7  #swr.jez-rakeeza-3.deem.sa/mcp/redis:7
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until redis-cli -h redis -a "$REDIS_PASSWORD" ping | grep PONG; do sleep 3; done
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: outline-secrets
+                  key: REDIS_PASSWORD
+      containers:
+        - name: outline
+          image: outlinewiki/outline:latest #swr.jez-rakeeza-3.deem.sa/mcp/outline:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: outline-config
+            - secretRef:
+                name: outline-secrets
+          env:
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: outline-secrets
+                  key: OPENAI_API_KEY
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 40
+            periodSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 60
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: outline
+  namespace: outline-stack
+spec:
+  selector:
+    app: outline
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000

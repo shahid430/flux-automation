@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vector-postgres
+  namespace: outline-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vector-postgres
+  template:
+    metadata:
+      labels:
+        app: vector-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: pgvector/pgvector:pg16-trixie  #swr.jez-rakeeza-3.deem.sa/mcp/pgvector:pg16
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: vector-secrets
+                  key: VECTOR_DB_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: vector-secrets
+                  key: VECTOR_DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: vector-secrets
+                  key: VECTOR_DB_PASSWORD
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: vector-postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vector-postgres
+  namespace: outline-stack
+spec:
+  selector:
+    app: vector-postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vector-db-init
+  namespace: outline-stack
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: init
+          image: pgvector/pgvector:pg16-trixie  #swr.jez-rakeeza-3.deem.sa/mcp/pgvector:pg16
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              export PGPASSWORD="$VECTOR_DB_PASSWORD"
+              until pg_isready -h vector-postgres -U "$VECTOR_DB_USER" -d "$VECTOR_DB_NAME"; do sleep 3; done
+              psql -h vector-postgres -U "$VECTOR_DB_USER" -d "$VECTOR_DB_NAME" <<'SQL'
+              CREATE EXTENSION IF NOT EXISTS vector;
+              SQL
+          env:
+            - name: VECTOR_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: vector-secrets
+                  key: VECTOR_DB_NAME
+            - name: VECTOR_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: vector-secrets
+                  key: VECTOR_DB_USER
+            - name: VECTOR_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: vector-secrets
+                  key: VECTOR_DB_PASSWORD
