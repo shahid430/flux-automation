@@ -7,7 +7,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: outline-secrets
-  namespace: ai-monitoring
+  namespace: outline
 type: Opaque
 stringData:
   # Outline secrets
@@ -27,7 +27,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: outline-redis-config
-  namespace: ai-monitoring
+  namespace: outline
 data:
   redis.conf: |
     # Minimal redis config (adjust as needed)
@@ -41,7 +41,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: outline-storage-pvc
-  namespace: ai-monitoring
+  namespace: outline
 spec:
   accessModes:
     - ReadWriteOnce
@@ -54,7 +54,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: outline-postgres-pvc
-  namespace: ai-monitoring
+  namespace: outline
 spec:
   accessModes:
     - ReadWriteOnce
@@ -67,7 +67,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: outline-redis
-  namespace: ai-monitoring
+  namespace: outline
 spec:
   selector:
     app: outline-redis
@@ -81,7 +81,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: outline-redis
-  namespace: ai-monitoring
+  namespace: outline
 spec:
   replicas: 1
   selector:
@@ -125,7 +125,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: outline-postgres
-  namespace: ai-monitoring
+  namespace: outline
 spec:
   selector:
     app: outline-postgres
@@ -139,7 +139,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: outline-postgres
-  namespace: ai-monitoring
+  namespace: outline
 spec:
   serviceName: outline-postgres
   replicas: 1
@@ -198,7 +198,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: outline
-  namespace: ai-monitoring
+  namespace: outline
 spec:
   selector:
     app: outline
@@ -213,7 +213,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: outline
-  namespace: ai-monitoring
+  namespace: outline
 spec:
   replicas: 1
   selector:
@@ -297,19 +297,4 @@ spec:
         - name: outline-data
           persistentVolumeClaim:
             claimName: outline-storage-pvc
----
-# Add traefik ingress route for outline to access via domain
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: outline-ingress
-  namespace: ai-monitoring
-spec:
-  entryPoints:
-    - web
-  routes:
-    - match: Host(`outline.deem.local`)
-      kind: Rule
-      services:
-        - name: outline
-          port: 3000
+

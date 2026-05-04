@@ -1,0 +1,120 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: outline-mcp-secret
+  namespace: ai-monitoring
+type: Opaque
+stringData:
+  MCP_AUTH_TOKENS: change-this-mcp-token
+  OUTLINE_API_KEY: change-this-outline-api-key
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: outline-mcp-config
+  namespace: ai-monitoring
+data:
+  OUTLINE_API_URL: https://app.getoutline.com/api
+  HTTP_HOST: 0.0.0.0
+  HTTP_PORT: "3000"
+  HTTP_RATE_LIMIT: "120"
+  HTTP_SESSION_TIMEOUT: "1800"
+  HTTP_MAX_BODY_SIZE: "1048576"
+  RUST_LOG: info
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: outline-mcp
+  namespace: ai-monitoring
+  labels:
+    app: outline-mcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: outline-mcp
+  template:
+    metadata:
+      labels:
+        app: outline-mcp
+    spec:
+      containers:
+        - name: outline-mcp
+          image: outline-mcp-server:v1.0-mcp
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: outline-mcp-config
+            - secretRef:
+                name: outline-mcp-secret
+          ports:
+            - name: http
+              containerPort: 3000
+          readinessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 6
+
+          livenessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            failureThreshold: 6
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: outline-mcp
+  namespace: ai-monitoring
+  labels:
+    app: outline-mcp
+spec:
+  type: ClusterIP
+  selector:
+    app: outline-mcp
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: outline-dev
+  namespace: ai-monitoring
+  annotations:
+    kubernetes.io/ingress.class: traefik-traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: grafana-dev-selfsigned
+spec:
+  ingressClassName: traefik-traefik
+  rules:
+    - host: outline.deem.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: outline
+                port:
+                  number: 3000
+  tls:
+    - hosts:
+        - outline-dev.local
+      secretName: outline-dev-tls
