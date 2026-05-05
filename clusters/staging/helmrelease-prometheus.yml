@@ -48,7 +48,7 @@ spec:
           - grafana-dev.local
         path: /
         # Uncomment and set if you use a specific ingress class
-        # ingressClassName: nginx
+        ingressClassName: nginx
         annotations: {}
         labels: {}
         tls: []
