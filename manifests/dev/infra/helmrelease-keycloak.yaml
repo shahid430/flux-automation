@@ -30,19 +30,12 @@ spec:
     createNamespace: true
   targetNamespace: auth
   values:
-    auth:
-      adminUser: admin
-      adminPassword: admin123
     image:
       registry: docker.io
       repository: bitnamilegacy/keycloak
       tag: 26.3.3-debian-12-r0
     postgresql:
       enabled: true
-      auth:
-        username: keycloak
-        password: keycloak123
-        database: keycloak
       image:
         registry: docker.io
         repository: bitnamilegacy/postgresql
@@ -53,4 +46,3 @@ spec:
       enabled: true
       hostname: keycloak.deem.local
       ingressClassName: traefik
-      
