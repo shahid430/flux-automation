@@ -3,4 +3,3 @@ kind: Kustomization
 resources:
  - traefik
  - helmrelease-keycloak.yaml
- - helmrelease-keycloak.yaml

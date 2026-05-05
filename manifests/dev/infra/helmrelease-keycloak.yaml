@@ -1,15 +1,15 @@
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata:
-  name: keycloak
-  namespace: flux-system
-spec:
-  interval: 1m0s
-  ref:
-    branch: main
-  url: https://github.com/shahid430/flux-automation
----
+# ---
+# apiVersion: source.toolkit.fluxcd.io/v1
+# kind: GitRepository
+# metadata:
+#   name: keycloak
+#   namespace: flux-system
+# spec:
+#   interval: 1m0s
+#   ref:
+#     branch: main
+#   url: https://github.com/shahid430/flux-automation
+# ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
