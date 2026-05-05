@@ -26,7 +26,7 @@ spec:
       chart: ./manifests/dev/infra/keycloak
       sourceRef:
         kind: GitRepository
-        name: flux-system
+        name: infra
         namespace: flux-system
       reconcileStrategy: ChartVersion
 
