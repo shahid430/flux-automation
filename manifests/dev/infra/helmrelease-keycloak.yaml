@@ -1,38 +1,34 @@
 ---
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata:
-  name: keycloak
-  namespace: flux-system
-spec:
-  interval: 1m0s
-  ref:
-    branch: main
-  url: https://github.com/shahid430/flux-automation
----
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: keycloak
   namespace: flux-system
-  annotations:
-    reconcile.fluxcd.io/requestedAt: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 spec:
-  chart:
-    spec:
-      chart: manifests/dev/infra/keycloak
-      sourceRef:
-        kind: GitRepository
-        name: keycloak
-      reconcileStrategy: ChartVersion
   interval: 10m
   install:
     createNamespace: true
   targetNamespace: auth
+
+  chart:
+    spec:
+      chart: ./manifests/dev/infra/keycloak
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      reconcileStrategy: ChartVersion
+
   values:
+    global:
+      postgresql:
+        auth:
+          password: KeycloakDB@12345
+
     auth:
       adminUser: admin
       adminPassword: Admin@12345
+
     image:
       registry: docker.io
       repository: bitnamilegacy/keycloak
@@ -52,7 +48,3 @@ spec:
 
     proxyHeaders: xforwarded
     httpEnabled: true
-
-
-
-
