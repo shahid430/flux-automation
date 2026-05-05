@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak-ingress-traefik
+  namespace: auth
+  annotations:
+    kubernetes.io/ingress.class: traefik-traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: grafana-dev-selfsigned
+spec:
+  ingressClassName: traefik-traefik
+  rules:
+    - host: grafana-dev.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: monitoring-kube-prometheus-stack-grafana
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - grafana-dev.local
+      secretName: grafana-dev-tls
