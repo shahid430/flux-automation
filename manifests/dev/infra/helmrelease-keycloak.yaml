@@ -31,26 +31,28 @@ spec:
   targetNamespace: auth
   values:
     auth:
-  adminUser: admin
-  adminPassword: Admin@12345
-
-postgresql:
-  enabled: true
-  auth:
-    username: bn_keycloak
-    password: KeycloakDB@12345
-    database: bitnami_keycloak
-    postgresPassword: PostgresRoot@12345
-
-    proxyHeaders: xforwarded
-    httpEnabled: true
+      adminUser: admin
+      adminPassword: Admin@12345
     image:
       registry: docker.io
       repository: bitnamilegacy/keycloak
       tag: 26.3.3-debian-12-r0
+
     postgresql:
+      enabled: true
+      auth:
+        username: bn_keycloak
+        password: KeycloakDB@12345
+        database: bitnami_keycloak
+        postgresPassword: PostgresRoot@12345
       image:
         registry: docker.io
         repository: bitnamilegacy/postgresql
         tag: 17.6.0-debian-12-r0
+
+    proxyHeaders: xforwarded
+    httpEnabled: true
+
+
+
 
