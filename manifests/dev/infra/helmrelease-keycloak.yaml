@@ -59,10 +59,3 @@ spec:
 
     proxyHeaders: xforwarded
     httpEnabled: true
-    ingress:
-      enabled: true
-      ingressClassName: traefik
-      hostname: keycloak.deem.local
-      path: /
-      pathType: Prefix
-      tls: false
