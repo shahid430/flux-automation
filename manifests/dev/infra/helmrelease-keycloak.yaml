@@ -30,6 +30,20 @@ spec:
     createNamespace: true
   targetNamespace: auth
   values:
+    auth:
+  adminUser: admin
+  adminPassword: Admin@12345
+
+postgresql:
+  enabled: true
+  auth:
+    username: bn_keycloak
+    password: KeycloakDB@12345
+    database: bitnami_keycloak
+    postgresPassword: PostgresRoot@12345
+
+    proxyHeaders: xforwarded
+    httpEnabled: true
     image:
       registry: docker.io
       repository: bitnamilegacy/keycloak
