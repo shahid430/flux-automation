@@ -16,9 +16,6 @@ spec:
       sourceRef:
         kind: GitRepository
         name: kube-prometheus-stack
-          #namespace: monitoring
-          #kind: HelmRepository
-          #name: prometheus-community
   interval: 10s
   install:
     createNamespace: true
@@ -40,6 +37,25 @@ spec:
       adminPassword: admin123
       plugins:
         - alexanderzobnin-zabbix-app
+      grafana.ini:
+        server:
+          root_url: http://grafana-dev.local
+
+        auth:
+          disable_login_form: false
+
+        auth.generic_oauth:
+          enabled: true
+          name: Keycloak
+          allow_sign_up: true
+          client_id: grafana
+          client_secret: rzd6IwPuAsCQArD3xPURSX0qpwwNXjan
+          scopes: openid email profile
+          auth_url: http://keycloak-deem.local/realms/deem/protocol/openid-connect/auth
+          token_url: http://keycloak-deem.local/realms/deem/protocol/openid-connect/token
+          api_url: http://keycloak-deem.local/realms/deem/protocol/openid-connect/userinfo
+          role_attribute_path: contains(realm_access.roles[*], 'grafana-admin') && 'Admin' || contains(realm_access.roles[*], 'grafana-editor') && 'Editor' || 'Viewer'
+          allow_assign_grafana_admin: true
       datasources.yaml:
         apiVersion: 1
       ingress:
