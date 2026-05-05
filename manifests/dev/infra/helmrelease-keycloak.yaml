@@ -35,14 +35,8 @@ spec:
       repository: bitnamilegacy/keycloak
       tag: 26.3.3-debian-12-r0
     postgresql:
-      enabled: true
       image:
         registry: docker.io
         repository: bitnamilegacy/postgresql
         tag: 17.6.0-debian-12-r0
-    proxyHeaders: xforwarded
-    httpEnabled: true
-    ingress:
-      enabled: true
-      hostname: keycloak.deem.local
-      ingressClassName: traefik
+
