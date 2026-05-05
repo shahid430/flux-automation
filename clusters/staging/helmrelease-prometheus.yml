@@ -33,10 +33,14 @@ spec:
                 requests:
                   storage: 10Gi
     grafana:
+      enabled: true
+
       adminUser: admin
       adminPassword: admin123
+
       plugins:
         - alexanderzobnin-zabbix-app
+
       grafana.ini:
         server:
           root_url: http://grafana-dev.local
@@ -56,17 +60,14 @@ spec:
           api_url: http://keycloak-deem.local/realms/deem/protocol/openid-connect/userinfo
           role_attribute_path: contains(realm_access.roles[*], 'grafana-admin') && 'Admin' || contains(realm_access.roles[*], 'grafana-editor') && 'Editor' || 'Viewer'
           allow_assign_grafana_admin: true
-      datasources.yaml:
-        apiVersion: 1
+
       ingress:
         enabled: true
+        ingressClassName: traefik-traefik  # 🔥 FIXED
         hosts:
           - grafana-dev.local
         path: /
-        # Uncomment and set if you use a specific ingress class
-        ingressClassName: nginx
         annotations: {}
-        labels: {}
         tls: []
     datasources:
       enabled: true
@@ -75,15 +76,6 @@ spec:
       isDefaultDatasource: false
       name: Prometheus
       uid: prometheus
- # ---
- # apiVersion: source.toolkit.fluxcd.io/v1
- # kind: HelmRepository
- # metadata:
- #   name: prometheus-community
- #   namespace: monitoring
- # spec:
- #   url: https://prometheus-community.github.io/helm-charts
- #   interval: 10m
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
