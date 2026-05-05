@@ -34,15 +34,15 @@ spec:
                   storage: 10Gi
     grafana:
       enabled: true
-
       adminUser: admin
       adminPassword: admin123
 
       plugins:
         - alexanderzobnin-zabbix-app
 
-      grafana.ini:
+      ini:
         server:
+          domain: grafana-dev.local
           root_url: http://grafana-dev.local
 
         auth:
@@ -63,11 +63,12 @@ spec:
 
       ingress:
         enabled: true
-        ingressClassName: traefik-traefik  # 🔥 FIXED
+        ingressClassName: traefik
         hosts:
           - grafana-dev.local
         path: /
         annotations: {}
+        labels: {}
         tls: []
     datasources:
       enabled: true
