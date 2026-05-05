@@ -62,7 +62,7 @@ spec:
     ingress:
       enabled: true
       ingressClassName: traefik-traefik
-      hostname: keycloak.deem.local
+      hostname: keycloak-deem.local
       path: /
       pathType: Prefix
       tls: false
