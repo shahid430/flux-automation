@@ -6,6 +6,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik-traefik
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: keycloak-deem-selfsigned
     cert-manager.io/cluster-issuer: keycloak-deem-selfsigned
 spec:
   ingressClassName: traefik-traefik
