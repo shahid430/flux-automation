@@ -6,21 +6,21 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: traefik-traefik
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    cert-manager.io/cluster-issuer: grafana-dev-selfsigned
+    cert-manager.io/cluster-issuer: keycloak-deem-selfsigned
 spec:
   ingressClassName: traefik-traefik
   rules:
-    - host: grafana-dev.local
+    - host: keycloak-deem.local
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: monitoring-kube-prometheus-stack-grafana
+                name: auth-keycloak
                 port:
                   number: 80
   tls:
     - hosts:
-        - grafana-dev.local
-      secretName: grafana-dev-tls
+        - keycloak-deem.local
+      secretName: keycloak-deem-tls
