@@ -16,6 +16,7 @@ metadata:
   name: keycloak
   namespace: flux-system
 spec:
+  pause: true
   interval: 10m
   install:
     createNamespace: true
