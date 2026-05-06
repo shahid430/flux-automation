@@ -56,3 +56,29 @@ spec:
         registry: docker.io
         repository: bitnamilegacy/postgresql
         tag: 17.6.0-debian-12-r0
+    proxyHeaders: xforwarded
+    httpEnabled: true
+
+    extraEnvVars:
+      - name: KC_HOSTNAME
+        value: keycloak-deem.local
+      - name: KC_HOSTNAME_STRICT
+        value: "false"
+      - name: KC_HTTP_ENABLED
+        value: "true"
+      - name: KC_PROXY_HEADERS
+        value: xforwarded
+
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      hostname: keycloak-deem.local
+      path: /
+      pathType: Prefix
+      tls: false
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        traefik.ingress.kubernetes.io/router.tls.certresolver: keycloak-deem-selfsigned
+        cert-manager.io/cluster-issuer: keycloak-deem-selfsigned
+        
