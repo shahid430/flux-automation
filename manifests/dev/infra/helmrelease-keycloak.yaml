@@ -77,8 +77,7 @@ spec:
       pathType: Prefix
       tls: false
       annotations:
-        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.entrypoints: web
         traefik.ingress.kubernetes.io/router.tls: "true"
         traefik.ingress.kubernetes.io/router.tls.certresolver: keycloak-deem-selfsigned
         cert-manager.io/cluster-issuer: keycloak-deem-selfsigned
-        
