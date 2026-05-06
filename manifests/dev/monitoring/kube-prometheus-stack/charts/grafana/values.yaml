@@ -903,9 +903,9 @@ grafana.ini:
     client_id: grafana
     client_secret: 9VVoDY0VOe0ukhzqjsNpkliz10PxTCjl
     scopes: openid email profile
-    auth_url: http://keycloak-deem.local/realms/deem/protocol/openid-connect/auth
-    token_url: http://keycloak-deem.local/realms/deem/protocol/openid-connect/token
-    api_url: http://keycloak-deem.local/realms/deem/protocol/openid-connect/userinfo
+    auth_url: https://keycloak-deem.local/realms/deem/protocol/openid-connect/auth
+    token_url: https://keycloak-deem.local/realms/deem/protocol/openid-connect/token
+    api_url: https://keycloak-deem.local/realms/deem/protocol/openid-connect/userinfo
     role_attribute_path: contains(realm_access.roles[*], 'grafana-admin') && 'Admin' || contains(realm_access.roles[*], 'grafana-editor') && 'Editor' || 'Viewer'
     allow_assign_grafana_admin: true
 ## grafana Authentication can be enabled with the following values on grafana.ini
