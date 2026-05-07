@@ -61,7 +61,7 @@ spec:
           email_attribute_path: email
 
       adminUser: admin
-      adminPassword: admin123
+      adminPassword: admin
 
       plugins:
         - alexanderzobnin-zabbix-app
