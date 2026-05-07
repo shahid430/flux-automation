@@ -4,15 +4,11 @@ kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
   namespace: flux-system
-  labels:
-    istio-injection: enabled
 spec:
   chart:
     spec:
       chart: ./manifests/dev/monitoring/kube-prometheus-stack
-        #chart: kube-prometheus-stack
       reconcileStrategy: ChartVersion
-        #version: "77.5.0"
       sourceRef:
         kind: GitRepository
         name: kube-prometheus-stack
