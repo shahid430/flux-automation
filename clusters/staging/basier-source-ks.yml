@@ -35,4 +35,3 @@ spec:
   sourceRef:
     kind: GitRepository
     name: basier
-      #  targetNamespace: basier
