@@ -1,5 +1,16 @@
+# apiVersion: source.toolkit.fluxcd.io/v1
+# kind: HelmRepository
+# metadata:
+#   name: kube-prometheus-stack
+#   namespace: flux-system
+# spec:
+#   interval: 1m0s
+#   ref:
+#     branch: main
+#   url: https://github.com/prometheus-community/helm-charts
+---
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+kind: GitRepository
 metadata:
   name: kube-prometheus-stack
   namespace: flux-system
@@ -7,4 +18,4 @@ spec:
   interval: 1m0s
   ref:
     branch: main
-  url: https://github.com/prometheus-community/helm-charts
+  url: https://github.com/shahid430/flux-automation
