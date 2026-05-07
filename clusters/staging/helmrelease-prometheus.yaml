@@ -14,7 +14,7 @@ spec:
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: GitRepository
-        name: kube-prometheus-stack
+        name: infra
   interval: 10s
   install:
     createNamespace: true
