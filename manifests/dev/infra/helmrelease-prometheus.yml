@@ -1,4 +1,15 @@
 ---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  url: https://github.com/shahid430/flux-automation
+---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -10,10 +21,8 @@ spec:
   chart:
     spec:
       suspend: false
-      chart: ./manifests/dev/monitoring/kube-prometheus-stack
-        #chart: kube-prometheus-stack
+      chart: manifests/dev/monitoring/kube-prometheus-stack
       reconcileStrategy: ChartVersion
-        #version: "77.5.0"
       sourceRef:
         kind: GitRepository
         name: kube-prometheus-stack
@@ -74,21 +83,6 @@ spec:
         path: /
         annotations: {}
         tls: []
-    datasources:
-      enabled: true
-      defaultDatasourceEnabled: false
-      defaultDashboardsEditable: false
-      isDefaultDatasource: false
-      name: Prometheus
-      uid: prometheus
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata:
-  name: kube-prometheus-stack
-  namespace: flux-system
-spec:
-  interval: 1m0s
-  ref:
-    branch: main
-  url: https://github.com/shahid430/flux-automation
+      datasources:
+        prometheus:
+          primaryUrl: http://kube-prometheus-stack-prometheus.monitoring:9090
