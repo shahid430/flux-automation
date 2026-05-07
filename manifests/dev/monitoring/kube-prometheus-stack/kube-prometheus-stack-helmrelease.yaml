@@ -1,13 +1,13 @@
----
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
   namespace: flux-system
-  annotations:
-    fluxcd.io/automated: "true"
-    fluxcd.io/health-check: "true" 
-spec:   
+spec:
+  interval: 10s
+  targetNamespace: monitoring
+  install:
+    createNamespace: true
   chart:
     spec:
       chart: ./manifests/dev/monitoring/kube-prometheus-stack
@@ -15,67 +15,68 @@ spec:
       sourceRef:
         kind: GitRepository
         name: staging
-  interval: 10s
-  install:
-    createNamespace: true
-  targetNamespace: monitoring
+        namespace: flux-system
+
   values:
-    fullnameOverride: "fluxcd"
-    prometheus: 
+    fullnameOverride: fluxcd
+
+    prometheus:
       prometheusSpec:
-        storageSpec: 
+        storageSpec:
           volumeClaimTemplate:
             spec:
               storageClassName: standard
-              accessModes: ["ReadWriteOnce"]
+              accessModes:
+                - ReadWriteOnce
               resources:
                 requests:
                   storage: 10Gi
+
     grafana:
       assertNoLeakedSecrets: false
-      grafana.ini:
-        server:
-          # Define how Grafana is accessed externally
-          # You may need to adjust this based on your ingress or NodePort setup
-          root_url: "https://grafana-dev.local/"
-        auth:
-          disable_login_form: false
-        auth.generic_oauth:
-          verbose_logging: true
-          enabled: true
-          name: Keycloak
-          allow_sign_up: true
-          client_id: grafana
-          client_secret: 1KjsO0CUmV3D7WnjSD3KeGvyTJaurDEv
-          scopes: openid email profile
-          # auth_url must be accessible from the user's browser
-          auth_url: http://192.168.49.2:30080/realms/grafana/protocol/openid-connect/auth
-          # token_url and api_url are server-to-server communications
-          token_url: http://keycloak.keycloak.svc.cluster.local:80/realms/grafana/protocol/openid-connect/token
-          api_url: http://keycloak.keycloak.svc.cluster.local:80/realms/grafana/protocol/openid-connect/userinfo
-          role_attribute_path: "contains(realm_access.roles[*], 'admin') && 'Admin' || 'Viewer'"      
-          login_attribute_path: preferred_username
-          name_attribute_path: name
-          email_attribute_path: email
-
       adminUser: admin
       adminPassword: Welcome@123
 
       plugins:
         - alexanderzobnin-zabbix-app
 
+      grafana.ini:
+        server:
+          root_url: "https://grafana-dev.local/"
+        auth:
+          disable_login_form: false
+        auth.generic_oauth:
+          enabled: true
+          verbose_logging: true
+          name: Keycloak
+          allow_sign_up: true
+          client_id: grafana
+          client_secret: 1KjsO0CUmV3D7WnjSD3KeGvyTJaurDEv
+          scopes: openid email profile
+          auth_url: http://192.168.49.2:30080/realms/grafana/protocol/openid-connect/auth
+          token_url: http://keycloak.keycloak.svc.cluster.local/realms/grafana/protocol/openid-connect/token
+          api_url: http://keycloak.keycloak.svc.cluster.local/realms/grafana/protocol/openid-connect/userinfo
+          role_attribute_path: "contains(realm_access.roles[*], 'admin') && 'Admin' || 'Viewer'"
+          login_attribute_path: preferred_username
+          name_attribute_path: name
+          email_attribute_path: email
+
       ingress:
         enabled: true
-        ingressClassName: traefik-traefik  # 🔥 FIXED
+        ingressClassName: traefik-traefik
         hosts:
           - grafana-dev.local
         path: /
         annotations: {}
         tls: []
-    datasources:
-      enabled: true
-      defaultDatasourceEnabled: false
-      defaultDashboardsEditable: false
-      isDefaultDatasource: false
-      name: Prometheus
-      uid: prometheus
+
+      datasources:
+        datasources.yaml:
+          apiVersion: 1
+          datasources:
+            - name: Prometheus
+              uid: prometheus
+              type: prometheus
+              access: proxy
+              url: http://fluxcd-prometheus.monitoring.svc.cluster.local:9090
+              isDefault: true
