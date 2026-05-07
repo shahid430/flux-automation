@@ -1,0 +1,94 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+  labels:
+    istio-injection: enabled
+spec:
+  chart:
+    spec:
+      suspend: false
+      chart: ./manifests/dev/monitoring/kube-prometheus-stack
+        #chart: kube-prometheus-stack
+      reconcileStrategy: ChartVersion
+        #version: "77.5.0"
+      sourceRef:
+        kind: GitRepository
+        name: kube-prometheus-stack
+  interval: 10s
+  install:
+    createNamespace: true
+  targetNamespace: monitoring
+  values:
+    fullnameOverride: "fluxcd"
+    prometheus: 
+      prometheusSpec:
+        storageSpec: 
+          volumeClaimTemplate:
+            spec:
+              storageClassName: standard
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 10Gi
+    grafana:
+      assertNoLeakedSecrets: false
+      grafana.ini:
+        server:
+          # Define how Grafana is accessed externally
+          # You may need to adjust this based on your ingress or NodePort setup
+          root_url: "https://grafana-dev.local/"
+        auth:
+          disable_login_form: false
+        auth.generic_oauth:
+          verbose_logging: true
+          enabled: true
+          name: Keycloak
+          allow_sign_up: true
+          client_id: grafana
+          client_secret: 1KjsO0CUmV3D7WnjSD3KeGvyTJaurDEv
+          scopes: openid email profile
+          # auth_url must be accessible from the user's browser
+          auth_url: http://192.168.49.2:30080/realms/grafana/protocol/openid-connect/auth
+          # token_url and api_url are server-to-server communications
+          token_url: http://keycloak.keycloak.svc.cluster.local:80/realms/grafana/protocol/openid-connect/token
+          api_url: http://keycloak.keycloak.svc.cluster.local:80/realms/grafana/protocol/openid-connect/userinfo
+          role_attribute_path: "contains(realm_access.roles[*], 'admin') && 'Admin' || 'Viewer'"      
+          login_attribute_path: preferred_username
+          name_attribute_path: name
+          email_attribute_path: email
+
+      adminUser: admin
+      adminPassword: admin
+
+      plugins:
+        - alexanderzobnin-zabbix-app
+
+      ingress:
+        enabled: true
+        ingressClassName: traefik-traefik  # 🔥 FIXED
+        hosts:
+          - grafana-dev.local
+        path: /
+        annotations: {}
+        tls: []
+    datasources:
+      enabled: true
+      defaultDatasourceEnabled: false
+      defaultDashboardsEditable: false
+      isDefaultDatasource: false
+      name: Prometheus
+      uid: prometheus
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: kube-prometheus-stack
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  url: https://github.com/shahid430/flux-automation
