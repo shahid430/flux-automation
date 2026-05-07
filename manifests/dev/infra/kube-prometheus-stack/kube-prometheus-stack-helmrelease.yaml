@@ -69,14 +69,3 @@ spec:
         path: /
         annotations: {}
         tls: []
-
-      datasources:
-        datasources.yaml:
-          apiVersion: 1
-          datasources:
-            - name: Prometheus
-              uid: prometheus
-              type: prometheus
-              access: proxy
-              url: http://fluxcd-prometheus.monitoring.svc.cluster.local:9090
-              isDefault: true
