@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: keycloak-ingress-traefik
-  namespace: auth
+  namespace: keycloak
   annotations:
     kubernetes.io/ingress.class: traefik-traefik
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
@@ -19,7 +19,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: auth-keycloak
+                name: keycloak
                 port:
                   number: 80
   tls:

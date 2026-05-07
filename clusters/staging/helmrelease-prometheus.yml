@@ -9,6 +9,7 @@ metadata:
 spec:
   chart:
     spec:
+      suspend: true
       chart: ./manifests/dev/monitoring/kube-prometheus-stack
         #chart: kube-prometheus-stack
       reconcileStrategy: ChartVersion
