@@ -4,14 +4,17 @@ kind: HelmRelease
 metadata:
   name: kube-prometheus-stack
   namespace: flux-system
-spec:
+  annotations:
+    fluxcd.io/automated: "true"
+    fluxcd.io/health-check: "true" 
+spec:   
   chart:
     spec:
       chart: ./manifests/dev/monitoring/kube-prometheus-stack
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: GitRepository
-        name: infra
+        name: kube-prometheus-stack
   interval: 10s
   install:
     createNamespace: true
@@ -76,3 +79,15 @@ spec:
       isDefaultDatasource: false
       name: Prometheus
       uid: prometheus
+
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: ingress-nginx
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  url: https://github.com/shahid430/flux-automation
