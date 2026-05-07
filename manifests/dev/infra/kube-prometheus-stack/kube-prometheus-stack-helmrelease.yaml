@@ -10,7 +10,7 @@ spec:
     createNamespace: true
   chart:
     spec:
-      chart: ./manifests/dev/monitoring/kube-prometheus-stack
+      chart: ./manifests/dev/infra/kube-prometheus-stack
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: GitRepository
