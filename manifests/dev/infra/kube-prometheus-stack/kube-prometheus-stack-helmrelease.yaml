@@ -51,7 +51,7 @@ spec:
           name: Keycloak
           allow_sign_up: true
           client_id: grafana
-          client_secret: 1KjsO0CUmV3D7WnjSD3KeGvyTJaurDEv
+          client_secret: R7LVoqjBghAMRGmJsol2TR4UNZB9396R
           scopes: openid email profile
           auth_url: http://192.168.49.2:30080/realms/grafana/protocol/openid-connect/auth
           token_url: http://keycloak.keycloak.svc.cluster.local/realms/grafana/protocol/openid-connect/token
