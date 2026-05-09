@@ -25,6 +25,7 @@ spec:
       adminUser: admin
       adminPassword: admin
     global:
+      nameOverride: ""
       security:
         allowInsecureImages: true
       postgresql:
