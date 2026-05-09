@@ -18,6 +18,7 @@ spec:
         namespace: flux-system
 
   values:
+    fullnameOverride: keycloak
     image:
       repository: bitnamilegacy/keycloak
     # Keycloak Admin User Configuration
@@ -25,7 +26,6 @@ spec:
       adminUser: admin
       adminPassword: admin
     global:
-      nameOverride: ""
       security:
         allowInsecureImages: true
       postgresql:
