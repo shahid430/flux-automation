@@ -1,0 +1,65 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: keycloak
+  namespace: flux-system
+spec:
+  interval: 10s
+  targetNamespace: keycloak
+  install:
+    createNamespace: true
+  chart:
+    spec:
+      chart: ./manifests/dev/infra/keycloak
+      version: 24.4.9
+      sourceRef:
+        kind: GitRepository
+        name: infra
+        namespace: flux-system
+
+  values:
+    image:
+      repository: bitnamilegacy/keycloak
+    # Keycloak Admin User Configuration
+    auth:
+      adminUser: admin
+      adminPassword: admin
+    global:
+      security:
+        allowInsecureImages: true
+      postgresql:
+        auth:
+          username: bn_keycloak
+          password: bn_keycloak
+          database: bitnami_keycloak
+    # PostgreSQL Specific Configuration
+    postgresql:
+      enabled: true
+      image:
+        repository: bitnamilegacy/postgresql
+      auth:
+        username: bn_keycloak
+        password: bn_keycloak
+        database: bitnami_keycloak
+
+    # Kubernetes Service Configuration
+    service:
+      type: NodePort
+      nodePorts:
+        http: 30080
+
+    # Additional Keycloak Environment Variables
+    extraEnvVars:
+      # Enable production mode to prevent thread blocking
+      - name: KC_PRODUCTION
+        value: "true"
+
+      - name: KC_HOSTNAME_STRICT
+        value: "false"
+      - name: KC_HTTP_ENABLED
+        value: "true"
+
+      - name: VERTX_WORKER_POOL_SIZE
+        value: "20"
+      - name: VERTX_EVENT_LOOP_POOL_SIZE
+        value: "8"
