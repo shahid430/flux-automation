@@ -36,6 +36,7 @@ spec:
     # PostgreSQL Specific Configuration
     postgresql:
       enabled: true
+      fullnameOverride: postgresql
       image:
         repository: bitnamilegacy/postgresql
       auth:
