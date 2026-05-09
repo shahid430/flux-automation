@@ -65,3 +65,25 @@ spec:
         value: "20"
       - name: VERTX_EVENT_LOOP_POOL_SIZE
         value: "8"
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: traefik-traefik
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        traefik.ingress.kubernetes.io/router.tls.certresolver: keycloak-deem-selfsigned
+        cert-manager.io/cluster-issuer: keycloak-deem-selfsigned
+      host: keycloak-deem.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak
+                port:
+                  number: 80
+      tls:
+        - hosts:
+            - keycloak-deem.local
+          secretName: keycloak-deem-tls
