@@ -21,7 +21,7 @@ spec:
     #    labels:
       #      environment: dev
   interval: 10s
-  path: ./manifests/dev/basier/
+  path: ./manifests/dev/app/
   prune: true
   timeout: 1m0s
   wait: false

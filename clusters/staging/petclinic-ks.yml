@@ -6,7 +6,7 @@ metadata:
 spec:
   pause: true
   interval: 10m
-  path: ./manifests/dev/basier/petclinic
+  path: ./manifests/dev/app/petclinic
   prune: true
   sourceRef:
     kind: GitRepository
@@ -19,7 +19,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
-  path: ./manifests/dev/basier/observability
+  path: ./manifests/dev/app/observability
   prune: true
   sourceRef:
     kind: GitRepository
