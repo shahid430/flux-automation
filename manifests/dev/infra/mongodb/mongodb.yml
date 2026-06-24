@@ -20,9 +20,9 @@ spec:
     metadata:
       labels:
         app: mongodb
-      annotations:
-        container.apparmor.security.beta.kubernetes.io/mongodb: "runtime/default"
-        seccomp.security.alpha.kubernetes.io/pod: "runtime/default"
+      # annotations:
+      #   container.apparmor.security.beta.kubernetes.io/mongodb: "runtime/default"
+      #   seccomp.security.alpha.kubernetes.io/pod: "runtime/default"
     spec:
       securityContext:
         runAsNonRoot: true
