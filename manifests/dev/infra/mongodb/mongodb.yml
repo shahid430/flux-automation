@@ -3,6 +3,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: mongodb
+  labels:
+    owner: devops
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -18,10 +20,48 @@ spec:
     metadata:
       labels:
         app: mongodb
+      annotations:
+        container.apparmor.security.beta.kubernetes.io/mongodb: "runtime/default"
+        seccomp.security.alpha.kubernetes.io/pod: "runtime/default"
     spec:
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: mongodb
-        image: mongo:8.0.6
+        image: mongo:8.0.6@sha256:ab6556e6d71d9773dd74002db924dc637abb49d079d6ef945982af3078fdf22c
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          privileged: false
+          capabilities:
+            drop:
+              - ALL
+          readOnlyRootFilesystem: true
+          seccompProfile:
+            type: RuntimeDefault
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        readinessProbe:
+          tcpSocket:
+            port: 27017
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          tcpSocket:
+            port: 27017
+          initialDelaySeconds: 30
+          periodSeconds: 20
+          failureThreshold: 5
         ports:
         - containerPort: 27017
         volumeMounts:
