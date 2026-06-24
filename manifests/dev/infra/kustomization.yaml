@@ -4,3 +4,4 @@ resources:
  - traefik
  - kube-prometheus-stack
  - keycloak
+ - mongodb
