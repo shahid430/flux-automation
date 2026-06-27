@@ -38,7 +38,6 @@ spec:
       adminPassword: Welcome@123
       plugins:
         - alexanderzobnin-zabbix-app
-        adadsdd
       grafana.ini:
         server:
           root_url: "https://grafana-dev.local/"
