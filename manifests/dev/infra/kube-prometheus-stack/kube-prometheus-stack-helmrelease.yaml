@@ -36,10 +36,8 @@ spec:
       assertNoLeakedSecrets: false
       adminUser: admin
       adminPassword: Welcome@123
-
       plugins:
         - alexanderzobnin-zabbix-app
-
       grafana.ini:
         server:
           root_url: "https://grafana-dev.local/"
