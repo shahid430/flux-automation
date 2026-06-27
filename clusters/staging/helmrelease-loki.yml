@@ -21,6 +21,23 @@ spec:
   values:
     loki:
       enabled: true
+      deploymentMode: SingleBinary
+      storage:
+        type: filesystem
+      schemaConfig:
+        configs:
+          - from: "2024-04-01"
+            store: tsdb
+            object_store: filesystem
+            schema: v13
+            index:
+              prefix: loki_index_
+              period: 24h
+      singleBinary:
+        replicas: 1
+        persistence:
+          enabled: true
+          size: 10Gi
     promtail:
       enabled: true
     grafana:
