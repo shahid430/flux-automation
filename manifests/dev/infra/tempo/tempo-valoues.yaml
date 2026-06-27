@@ -16,7 +16,7 @@ tempo:
           endpoint: 0.0.0.0:4318
 
 persistence:
-  enabled: false
+  enabled: true
 
 service:
   type: ClusterIP
